@@ -41,7 +41,7 @@ The React-based relying party component executes entirely in the user’s client
 
 ## Running the Prototype
 
-The prototype targets macOS or Linux hosts for orchestration, with confidential workloads running on Google Cloud Intel TDX VMs. Replace placeholder values with your environment specifics when following the steps below.
+Run the orchestration commands from a macOS or Linux workstation (the scripts assume a POSIX shell and native tooling). The confidential workloads themselves execute remotely on Google Cloud Intel TDX VMs. Replace placeholder values with your environment specifics when following the steps below.
 
 ### Prerequisites
 
@@ -55,9 +55,12 @@ The prototype targets macOS or Linux hosts for orchestration, with confidential 
 ```bash
 cd infrastructure
 cp terraform.tfvars.example terraform.tfvars
+
 # Edit terraform.tfvars with your project, region, and image IDs
+
 gcloud auth application-default login
 gcloud config set project <your-project-id>
+
 terraform init
 terraform plan
 terraform apply
@@ -79,8 +82,11 @@ For deployment into the CVM and access to genuine Intel TDX quotes:
 ```bash
 cd evidence-provider
 cp .deploy.env.example .deploy.env
+
 # Populate REMOTE_USER, REMOTE_HOST, REMOTE_ZONE to match the CVM
+
 go mod tidy
+
 ./deploy-and-run.sh
 ```
 
@@ -103,11 +109,13 @@ By default the service listens on port `8081` and exposes `/verify/tdx-quote`, `
 ```bash
 cd relying-application
 npm install
+
 # Configure service endpoints before starting the dev server
 cat <<'EOF' >.env
 VITE_ATTESTER_URL=https://<evidence-provider-host>:8080
 VITE_VERIFIER_URL=https://<evidence-verifier-host>:8081
 EOF
+
 npm run dev
 ```
 
