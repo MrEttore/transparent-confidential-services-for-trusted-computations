@@ -37,7 +37,7 @@ Terraform modules create a confidential VM on Google Cloud, configure firewall i
 
 ### Relying Application (`relying-application/src/features/attestation`)
 
-The React-based relying party component executes entirely in the user’s client. It generates fresh 64-byte challenges, calls the Evidence Provider, forwards the evidence to the Verifier, and renders both raw artifacts and human-readable verdicts. Subcomponents such as `AttestationTimeline`, `CloudInfrastructureOverview`, and `IndependentVerificationResources` make the protocol transparent, echoing the user-centric design goals from the paper.
+The React-based relying party component executes entirely in the user’s client. It generates fresh 64-byte challenges, calls the Evidence Provider, forwards the evidence to the Evidence Verifier, and renders both raw artifacts and human-readable verdicts. Subcomponents such as `AttestationTimeline`, `CloudInfrastructureOverview`, and `IndependentVerificationResources` make the protocol transparent, echoing the user-centric design goals from the paper. A UI-focused walkthrough with screenshot placeholders is available in [`relying-application/README.md`](relying-application/README.md).
 
 ## Running the Prototype
 

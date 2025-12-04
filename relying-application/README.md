@@ -1,54 +1,76 @@
-# React + TypeScript + Vite
+# Relying Application — Attestation UI Walkthrough
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The relying application is a React + TypeScript single-page experience that lets end users orchestrate the full attestation round-trip before sharing sensitive data. This guide focuses on the attestation feature (`src/features/attestation`) and explains how the UI surfaces the challenge generation, evidence collection, and verification phases defined in the paper.
 
-Currently, two official plugins are available:
+## Attestation Workflow Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The UI guides the user through three stages:
 
-## Expanding the ESLint configuration
+1. **Generate Challenge:** create a fresh 64-byte nonce on the client, display it, and cache it in Redux state.
+2. **Gather Evidence:** call the Evidence Provider to retrieve quote, workload, and infrastructure bundles bound to the challenge.
+3. **Verify Evidence:** submit each evidence bundle to the Evidence Verifier and review the signed verdicts before continuing.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+The following sections break down how the main parent components visualize each stage and expose advanced tooling for power users.
 
-```js
-export default tseslint.config({
-    extends: [
-        // Remove ...tseslint.configs.recommended and replace with this
-        ...tseslint.configs.recommendedTypeChecked,
-        // Alternatively, use this for stricter rules
-        ...tseslint.configs.strictTypeChecked,
-        // Optionally, add this for stylistic rules
-        ...tseslint.configs.stylisticTypeChecked,
-    ],
-    languageOptions: {
-        // other options...
-        parserOptions: {
-            project: ['./tsconfig.node.json', './tsconfig.app.json'],
-            tsconfigRootDir: import.meta.dirname,
-        },
-    },
-});
+## `AttestationTimeline`
+
+`AttestationTimeline` renders the stepper overview of the attestation protocol and wires modal actions to the attestation Redux slice.
+
+- **Header & Status Surface:** the `Header` component summarizes the protocol, while `AttestationStep` cards show real-time status (idle, in-progress, done) for each phase. A trust badge appears once verification succeeds.
+- **Inline Actions:** each card exposes a primary CTA (`Generate`, `Fetch`, `Verify`) that opens the appropriate modal (`GenerateChallenge`, `FetchEvidence`, `VerifyEvidence`). These modals drive the network requests and dispatch slice actions.
+- **Artifact Inspection:** secondary buttons open detail viewers:
+    - `ViewChallenge` shows the raw nonce and hex representation.
+    - `ViewEvidence` renders syntax-highlighted JSON for quotes, workload inventories, or infrastructure metadata. For large payloads the component supports expand/collapse affordances.
+    - `ViewVerificationResult` lists the verdict, timestamps, matching digests, and links back to reference baselines.
+- **Freshness Tracking:** `computeChallengeFreshness` runs on every render to flag reused or stale challenges, reinforcing the nonce requirement described in the paper.
+
+Suggested screenshot placeholders:
+
+```markdown
+![Attestation timeline overview](docs/attestation-timeline-overview.png)
+![Quote evidence modal](docs/attestation-quote-modal.png)
+![Verification result modal](docs/attestation-verification-modal.png)
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## `CloudInfrastructureOverview`
 
-```js
-// eslint.config.js
-import reactDom from 'eslint-plugin-react-dom';
-import reactX from 'eslint-plugin-react-x';
+`CloudInfrastructureOverview` presents the attested runtime environment once evidence has been gathered. It is composed of two stacked cards.
 
-export default tseslint.config({
-    plugins: {
-        // Add the react-x and react-dom plugins
-        'react-x': reactX,
-        'react-dom': reactDom,
-    },
-    rules: {
-        // other rules...
-        // Enable its recommended typescript rules
-        ...reactX.configs['recommended-typescript'].rules,
-        ...reactDom.configs.recommended.rules,
-    },
-});
+### `InfrastructureSummary`
+
+- **Trusted Metadata Panel:** renders key/value pairs for the VM (instance ID, region, TDX enablement, CPU platform) with contextual coloring based on `TrustStatusBadge`.
+- **Deep-Dive Modals:** `Inspect disk` triggers `ViewInstanceDisk`, exposing boot disk provenance and image digests. `Inspect VM` opens `ViewInstanceIdentity` to show the full GCP instance document.
+- **Empty State Messaging:** when evidence is missing, the panel instructs users to gather infrastructure evidence first.
+
+### `WorkloadsSummary`
+
+- **Container Inventory:** lists each running container, image digest, creation time, and OCI labels via `WorkloadContainer` tiles. Tapping a tile launches the `ViewContainer` modal with full JSON.
+- **Scrollable Layout:** supports long container lists while preserving context for the summary header and trust badges.
+
+Suggested screenshot placeholders:
+
+```markdown
+![Infrastructure summary card](docs/attestation-infrastructure-summary.png)
+![Workload inventory list](docs/attestation-workloads-list.png)
+![Instance disk modal](docs/attestation-disk-modal.png)
 ```
+
+## `IndependentVerificationResources`
+
+This section equips users (or auditors) with links to reproduce attestation independently.
+
+- **Resource Grid:** `VerificationResource` cards highlight container images, verifier binaries, and baseline manifests. Each card includes a concise description and external link.
+- **Extensible Layout:** easily extend the grid with additional artifacts such as policy documents or signed SBOMs.
+
+Suggested screenshot placeholders:
+
+```markdown
+![Independent verification resources grid](docs/attestation-independent-resources.png)
+```
+
+## Additional UI Capabilities
+
+- **Session State Management:** the attestation slice persists the current challenge, evidence bundles, and verification results so that users can revisit artifacts without re-running the flow.
+- **Modal System:** shared `Modal` and `ModalType` definitions ensure a consistent look, keyboard accessibility, and straightforward extension for new artifact viewers.
+- **Trust Badges:** `TrustStatusBadge` communicates verification results at-a-glance, switching between trusted, untrusted, and pending states.
+- **Timeline Reset Hooks:** the slice exposes actions to clear evidence or restart attestation, making it simple to demonstrate replay protection during live talks.
