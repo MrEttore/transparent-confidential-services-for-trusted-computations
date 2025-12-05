@@ -21,7 +21,11 @@ Together, these components operationalize the four attestation mechanisms highli
 - `examples/` - Canonical evidence bundles and verification results cited in the paper, useful for offline inspection.
 - `load-tests/` - K6 scripts and payloads used to characterize attestation latency under load.
 
-## Framework Roles in This Implementation
+## Implemented Framework Roles
+
+### Computational Logic Attester (`infrastructure/`)
+
+Terraform modules create a confidential VM on Google Cloud, configure firewall ingress for attestation traffic, and install the workload bootstrap (`init-tee.sh`). The VM launches the production workload container (`llm-core`) under systemd, ensuring the runtime measurements align with the published baseline manifests. This matches the paper’s description of a CVM acting as the root of trust for confidential AI inference.
 
 ### Evidence Provider (`evidence-provider/`)
 
@@ -31,13 +35,13 @@ Built in Go, the Evidence Provider runs alongside the confidential workload insi
 
 The Verifier is a stateless Go service intended to execute in a client-controlled or auditor-controlled environment. Each endpoint parses the submitted evidence, fetches public reference values (Intel endorsement certificates, workload digests, infrastructure manifests), and emits an appraisal result. Because no hidden state is kept server-side, third parties can reproduce verdicts, satisfying the paper’s verifiability requirement. Endpoint-level request/response details are captured in [`evidence-verifier/README.md`](evidence-verifier/README.md).
 
-### Computational Logic Attester (`infrastructure/`)
-
-Terraform modules create a confidential VM on Google Cloud, configure firewall ingress for attestation traffic, and install the workload bootstrap (`init-tee.sh`). The VM launches the production workload container (`llm-core`) under systemd, ensuring the runtime measurements align with the published baseline manifests. This matches the paper’s description of a CVM acting as the root of trust for confidential AI inference.
-
 ### Relying Application (`relying-application/src/features/attestation`)
 
 The React-based relying party component executes entirely in the user’s client. It generates fresh 64-byte challenges, calls the Evidence Provider, forwards the evidence to the Evidence Verifier, and renders both raw artifacts and human-readable verdicts. Subcomponents such as `AttestationTimeline`, `CloudInfrastructureOverview`, and `IndependentVerificationResources` make the protocol transparent, echoing the user-centric design goals from the paper. A UI-focused walkthrough with screenshot placeholders is available in [`relying-application/README.md`](relying-application/README.md).
+
+### Reference Value Provider (`reference-value-provider/`)
+
+...
 
 ## Running the Prototype
 
