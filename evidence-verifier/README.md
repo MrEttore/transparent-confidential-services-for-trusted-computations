@@ -38,18 +38,18 @@ All verification endpoints expect the Relying Application to forward the evidenc
 
 ```jsonc
 {
-    "status": "success",
-    "data": {
-        "isVerified": true,
-        "message": "TDX quote matches baseline and challenge.",
-        "timestamp": "2025-06-15T09:25:03.964712Z"
-    }
+  "status": "success",
+  "data": {
+    "isVerified": true,
+    "message": "TDX quote matches baseline and challenge.",
+    "timestamp": "2025-06-15T09:25:03.964712Z"
+  }
 }
 ```
 
--   `200 OK` when verification succeeds.
--   `400 Bad Request` for malformed JSON or missing fields.
--   `422 Unprocessable Entity` when verification fails (e.g., challenge mismatch, signature failure).
+- `200 OK` when verification succeeds.
+- `400 Bad Request` for malformed JSON or missing fields.
+- `422 Unprocessable Entity` when verification fails (e.g., challenge mismatch, signature failure).
 
 ### POST /verify/workloads
 
@@ -79,21 +79,21 @@ All verification endpoints expect the Relying Application to forward the evidenc
 
 ```jsonc
 {
-    "status": "success",
-    "data": {
-        "isVerified": true,
-        "message": "Workload digest matches sanctuairy/llm-core:latest",
-        "goldenImageDigest": "sha256:ef903eae47acc61ad494fcfe5eb51441cb81465e6131f3532bcb9309eb4210e0",
-        "providedImageDigest": "sha256:1fa274d318656b6cdf70210930ad8dee5069e6c93765937d8af41013ec0db5f6",
-        "referenceImage": "sanctuairy/llm-core:latest",
-        "timestamp": "2025-06-15T09:25:05.112349Z"
-    }
+  "status": "success",
+  "data": {
+    "isVerified": true,
+    "message": "Workload digest matches sanctuairy/llm-core:latest",
+    "goldenImageDigest": "sha256:ef903eae47acc61ad494fcfe5eb51441cb81465e6131f3532bcb9309eb4210e0",
+    "providedImageDigest": "sha256:1fa274d318656b6cdf70210930ad8dee5069e6c93765937d8af41013ec0db5f6",
+    "referenceImage": "sanctuairy/llm-core:latest",
+    "timestamp": "2025-06-15T09:25:05.112349Z"
+  }
 }
 ```
 
--   `200 OK` when digests and challenge validation succeed.
--   `400 Bad Request` for malformed JSON or missing reference information.
--   `422 Unprocessable Entity` when digest comparison or challenge validation fails.
+- `200 OK` when digests and challenge validation succeed.
+- `400 Bad Request` for malformed JSON or missing reference information.
+- `422 Unprocessable Entity` when digest comparison or challenge validation fails.
 
 ### POST /verify/infrastructure
 
@@ -120,20 +120,20 @@ All verification endpoints expect the Relying Application to forward the evidenc
 
 ```jsonc
 {
-    "status": "success",
-    "data": {
-        "isVerified": true,
-        "message": "Infrastructure evidence matches baseline manifest.",
-        "verifiedBootDiskSourceImage": "https://www.googleapis.com/compute/v1/projects/sanctuairy/global/images/golden-reference-tee",
-        "verifiedBootDiskSourceImageID": "2293782220127998194",
-        "timestamp": "2025-06-15T09:25:06.004582Z"
-    }
+  "status": "success",
+  "data": {
+    "isVerified": true,
+    "message": "Infrastructure evidence matches baseline manifest.",
+    "verifiedBootDiskSourceImage": "https://www.googleapis.com/compute/v1/projects/sanctuairy/global/images/golden-reference-tee",
+    "verifiedBootDiskSourceImageID": "2293782220127998194",
+    "timestamp": "2025-06-15T09:25:06.004582Z"
+  }
 }
 ```
 
--   `200 OK` when provenance verification succeeds.
--   `400 Bad Request` for malformed JSON or missing manifest URL.
--   `422 Unprocessable Entity` when evidence differs from the baseline or the challenge mismatches.
+- `200 OK` when provenance verification succeeds.
+- `400 Bad Request` for malformed JSON or missing manifest URL.
+- `422 Unprocessable Entity` when evidence differs from the baseline or the challenge mismatches.
 
 ## Error Envelope
 
@@ -141,8 +141,8 @@ On failure the service responds with:
 
 ```json
 {
-    "status": "error",
-    "message": "human-readable description"
+  "status": "error",
+  "message": "human-readable description"
 }
 ```
 
@@ -150,6 +150,6 @@ HTTP status codes mirror the handler outcome (`400` for request validation error
 
 ## Operational Notes
 
--   The service listens on HTTP port `8081`. Deploy it behind TLS when exposed externally.
--   `/metrics` exposes Prometheus request metrics; `/debug/pprof/*` is intended for controlled debugging.
--   Keep the baseline manifests and Docker registry credentials (if required) accessible from the environment hosting the verifier.
+- The service listens on HTTP port `8081`. Deploy it behind TLS when exposed externally.
+- `/metrics` exposes Prometheus request metrics; `/debug/pprof/*` is intended for controlled debugging.
+- Keep the baseline manifests and Docker registry credentials (if required) accessible from the environment hosting the verifier.

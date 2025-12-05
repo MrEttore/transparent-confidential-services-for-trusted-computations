@@ -4,22 +4,22 @@ This repository contains the reference implementation that accompanies the paper
 
 The implementation instantiates the four principal roles introduced in the paper:
 
--   **Computational Logic Attester:** a confidential VM that runs the sensitive workload and exposes attestable state.
--   **Evidence Provider:** an in-TEE service that aggregates hardware quotes, workload digests, and infrastructure metadata.
--   **Verifier Application:** an independent appraisal service that validates attestation evidence against public baselines and endorsements.
--   **Relying Application:** a client-side feature that orchestrates the challenge-evidence-verification loop for end users.
+- **Computational Logic Attester:** a confidential VM that runs the sensitive workload and exposes attestable state.
+- **Evidence Provider:** an in-TEE service that aggregates hardware quotes, workload digests, and infrastructure metadata.
+- **Verifier Application:** an independent appraisal service that validates attestation evidence against public baselines and endorsements.
+- **Relying Application:** a client-side feature that orchestrates the challenge-evidence-verification loop for end users.
 
 Together, these components operationalize the four attestation mechanisms highlighted in the paper: the _User-Facing Attestation Flow_, the _Verifiable Attestation Bundle_, the _Workload Verification Extension_, and the _Nonce-Bound Evidence_.
 
 ## Repository Layout
 
--   `evidence-provider/` - Go service deployed inside the confidential VM. Talks to Intel TDX, the container runtime, and cloud metadata services to assemble evidence bundles. Includes a Dockerfile and an opinionated `deploy-and-run.sh` script for pushing binaries to a remote CVM via `gcloud`.
--   `evidence-verifier/` - Go service that implements the stateless Verifier Application. Provides HTTP endpoints for quote, workload, and infrastructure appraisal, returning structured attestation results.
--   `relying-application/` - React single-page application. The `features/attestation` feature renders the user-facing attestation flow, issues fresh challenges, and presents evidence and verifier verdicts.
--   `infrastructure/` - Terraform configuration and bootstrap scripts that provision the Computational Logic Attester on Google Cloud with Intel TDX support. The `init-tee.sh` helper prepares Docker, Go, and the workload service inside the CVM.
--   `middleware/` - Nginx and Flask demo showing sticky-session strategies that keep multi-round attestation conversations anchored to a single CVM instance.
--   `examples/` - Canonical evidence bundles and verification results cited in the paper, useful for offline inspection.
--   `load-tests/` - K6 scripts and payloads used to characterize attestation latency under load.
+- `evidence-provider/` - Go service deployed inside the confidential VM. Talks to Intel TDX, the container runtime, and cloud metadata services to assemble evidence bundles. Includes a Dockerfile and an opinionated `deploy-and-run.sh` script for pushing binaries to a remote CVM via `gcloud`.
+- `evidence-verifier/` - Go service that implements the stateless Verifier Application. Provides HTTP endpoints for quote, workload, and infrastructure appraisal, returning structured attestation results.
+- `relying-application/` - React single-page application. The `features/attestation` feature renders the user-facing attestation flow, issues fresh challenges, and presents evidence and verifier verdicts.
+- `infrastructure/` - Terraform configuration and bootstrap scripts that provision the Computational Logic Attester on Google Cloud with Intel TDX support. The `init-tee.sh` helper prepares Docker, Go, and the workload service inside the CVM.
+- `middleware/` - Nginx and Flask demo showing sticky-session strategies that keep multi-round attestation conversations anchored to a single CVM instance.
+- `examples/` - Canonical evidence bundles and verification results cited in the paper, useful for offline inspection.
+- `load-tests/` - K6 scripts and payloads used to characterize attestation latency under load.
 
 ## Framework Roles in This Implementation
 
@@ -45,10 +45,10 @@ Run the orchestration commands from a macOS or Linux workstation (the scripts as
 
 ### Prerequisites
 
--   Go 1.24 (or newer) and Docker for building the Go services locally.
--   Node.js 20+ and npm (or pnpm) for the relying application.
--   Terraform 1.2+ and Google Cloud SDK (`gcloud`) with access to Intel TDX-enabled projects.
--   An Intel TDX-enabled machine image available to your Google Cloud project (see `infrastructure/terraform.tfvars.example`).
+- Go 1.24 (or newer) and Docker for building the Go services locally.
+- Node.js 20+ and npm (or pnpm) for the relying application.
+- Terraform 1.2+ and Google Cloud SDK (`gcloud`) with access to Intel TDX-enabled projects.
+- An Intel TDX-enabled machine image available to your Google Cloud project (see `infrastructure/terraform.tfvars.example`).
 
 ### 1. Provision the Computational Logic Attester
 
@@ -123,15 +123,15 @@ The Vite development server (default `http://localhost:5173`) renders the attest
 
 ### 5. Optional Supporting Components
 
--   **Middleware sticky-session demo (`middleware/`):** Illustrates the load-balancer affinity strategies needed to keep the challenge–response handshake attached to a single CVM. See the folder README for IP-hash versus cookie-based setups.
--   **Load testing (`load-tests/`):** K6 scripts reproduce the performance evaluation referenced in the paper. Adjust target URLs before running `k6 run ...`.
--   **Example artifacts (`examples/`):** Pre-captured JSON evidence and verification results align with the figures and discussion in the paper’s implementation and evaluation sections.
+- **Middleware sticky-session demo (`middleware/`):** Illustrates the load-balancer affinity strategies needed to keep the challenge–response handshake attached to a single CVM. See the folder README for IP-hash versus cookie-based setups.
+- **Load testing (`load-tests/`):** K6 scripts reproduce the performance evaluation referenced in the paper. Adjust target URLs before running `k6 run ...`.
+- **Example artifacts (`examples/`):** Pre-captured JSON evidence and verification results align with the figures and discussion in the paper’s implementation and evaluation sections.
 
 ## Connecting Back to the Paper
 
 Each directory in this repository maps directly to the system roles and mechanisms introduced in the paper’s implementation section:
 
--   **Nonce-bound attestation** is realized by the Evidence Provider’s challenge-binding handlers and the Relying Application’s challenge generator.
--   **Verifiable evidence bundles** materialize as the JSON payloads returned by the Evidence Provider and validated by the Evidence Verifier against public registries (Intel PCKs, Docker image digests, GitHub-hosted manifests).
--   **Workload integrity validation** is enforced through the workload endpoints and Terraform-managed golden images, ensuring the runtime matches published digests.
--   **Transparent user interaction** is implemented in the React feature layer, which exposes every protocol step, underlying artifact, and independent replay resources.
+- **Nonce-bound attestation** is realized by the Evidence Provider’s challenge-binding handlers and the Relying Application’s challenge generator.
+- **Verifiable evidence bundles** materialize as the JSON payloads returned by the Evidence Provider and validated by the Evidence Verifier against public registries (Intel PCKs, Docker image digests, GitHub-hosted manifests).
+- **Workload integrity validation** is enforced through the workload endpoints and Terraform-managed golden images, ensuring the runtime matches published digests.
+- **Transparent user interaction** is implemented in the React feature layer, which exposes every protocol step, underlying artifact, and independent replay resources.
