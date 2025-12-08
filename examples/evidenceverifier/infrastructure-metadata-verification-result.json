@@ -1,9 +1,0 @@
-{
-  "data": {
-    "isVerified": true,
-    "message": "infrastructure successfully verified",
-    "verifiedBootDiskSourceImage": "https://www.googleapis.com/compute/v1/projects/sanctuairy/global/images/golden-reference-tee",
-    "verifiedBootDiskSourceImageID": "2293782220127998194",
-    "timestamp": "0001-01-01T00:00:00Z"
-  }
-}

@@ -1,19 +1,19 @@
 {
   "summary": {
     "provider": "Google Cloud Platform",
-    "instanceId": "8105972874086498876",
-    "name": "confidential-service-tee",
+    "instanceId": "9214714451018122242",
+    "name": "cvm-1",
     "zone": "europe-west4-a",
     "machineType": "c3-standard-4",
     "status": "RUNNING",
-    "projectId": "confidential-infrastructure"
+    "projectId": "cvm-icdcs"
   },
   "instance": {
     "confidentialInstanceConfig": {
       "confidentialInstanceType": "TDX"
     },
     "cpuPlatform": "Intel Sapphire Rapids",
-    "creationTimestamp": "2025-06-14T06:44:51.533-07:00",
+    "creationTimestamp": "2025-12-07T09:35:41.982-08:00",
     "disks": [
       {
         "architecture": "X86_64",
@@ -64,54 +64,53 @@
             }
           ]
         },
-        "source": "https://www.googleapis.com/compute/v1/projects/confidential-infrastructure/zones/europe-west4-a/disks/confidential-service-tee",
+        "source": "https://www.googleapis.com/compute/v1/projects/cvm-icdcs/zones/europe-west4-a/disks/cvm-1",
         "type": "PERSISTENT"
       }
     ],
-    "fingerprint": "dZ72KBIVT2I=",
-    "id": "8105972874086498876",
+    "fingerprint": "rvbNBrkuvXg=",
+    "id": "9214714451018122242",
     "kind": "compute#instance",
     "labelFingerprint": "42WmSpB8rSM=",
-    "lastStartTimestamp": "2025-06-17T05:37:07.452-07:00",
-    "lastStopTimestamp": "2025-06-15T02:34:57.014-07:00",
-    "machineType": "https://www.googleapis.com/compute/v1/projects/confidential-infrastructure/zones/europe-west4-a/machineTypes/c3-standard-4",
+    "lastStartTimestamp": "2025-12-08T05:40:46.433-08:00",
+    "lastStopTimestamp": "2025-12-07T09:58:18.381-08:00",
+    "machineType": "https://www.googleapis.com/compute/v1/projects/cvm-icdcs/zones/europe-west4-a/machineTypes/c3-standard-4",
     "metadata": {
-      "fingerprint": "Qqx7GDIO3Z0=",
+      "fingerprint": "EFGoHTsO_vU=",
       "kind": "compute#metadata"
     },
-    "name": "confidential-service-tee",
+    "name": "cvm-1",
     "networkInterfaces": [
       {
         "accessConfigs": [
           {
             "kind": "compute#accessConfig",
-            "name": "External NAT",
-            "natIP": "35.204.148.154",
+            "name": "external-nat",
+            "natIP": "34.7.214.206",
             "networkTier": "PREMIUM",
             "type": "ONE_TO_ONE_NAT"
           }
         ],
-        "fingerprint": "Ue39GEd7p_g=",
+        "fingerprint": "6NxEyjBSMGQ=",
         "kind": "compute#networkInterface",
         "name": "nic0",
-        "network": "https://www.googleapis.com/compute/v1/projects/confidential-infrastructure/global/networks/default",
-        "networkIP": "10.164.0.63",
+        "network": "https://www.googleapis.com/compute/v1/projects/cvm-icdcs/global/networks/default",
+        "networkIP": "10.164.0.3",
         "stackType": "IPV4_ONLY",
-        "subnetwork": "https://www.googleapis.com/compute/v1/projects/confidential-infrastructure/regions/europe-west4/subnetworks/default"
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/cvm-icdcs/regions/europe-west4/subnetworks/default"
       }
     ],
+    "resourceStatus": {},
     "scheduling": {
       "automaticRestart": true,
       "onHostMaintenance": "TERMINATE",
       "provisioningModel": "STANDARD"
     },
-    "selfLink": "https://www.googleapis.com/compute/v1/projects/confidential-infrastructure/zones/europe-west4-a/instances/confidential-service-tee",
+    "selfLink": "https://www.googleapis.com/compute/v1/projects/cvm-icdcs/zones/europe-west4-a/instances/cvm-1",
     "serviceAccounts": [
       {
-        "email": "1022905377138-compute@developer.gserviceaccount.com",
-        "scopes": [
-          "https://www.googleapis.com/auth/cloud-platform"
-        ]
+        "email": "40815901860-compute@developer.gserviceaccount.com",
+        "scopes": ["https://www.googleapis.com/auth/cloud-platform"]
       }
     ],
     "shieldedInstanceConfig": {
@@ -124,16 +123,14 @@
     },
     "status": "RUNNING",
     "tags": {
-      "fingerprint": "JhO3Z8oTo_0=",
-      "items": [
-        "allow-attestation"
-      ]
+      "fingerprint": "77qVEfZytmA=",
+      "items": ["allow-attestation", "allow-service-requests"]
     },
-    "zone": "https://www.googleapis.com/compute/v1/projects/confidential-infrastructure/zones/europe-west4-a"
+    "zone": "https://www.googleapis.com/compute/v1/projects/cvm-icdcs/zones/europe-west4-a"
   },
   "disk": {
     "architecture": "X86_64",
-    "creationTimestamp": "2025-06-14T06:44:51.540-07:00",
+    "creationTimestamp": "2025-12-07T09:35:41.990-08:00",
     "guestOsFeatures": [
       {
         "type": "VIRTIO_SCSI_MULTIQUEUE"
@@ -163,28 +160,26 @@
         "type": "GVNIC"
       }
     ],
-    "id": "635602283238834748",
+    "id": "9057367825912955906",
     "kind": "compute#disk",
     "labelFingerprint": "42WmSpB8rSM=",
-    "lastAttachTimestamp": "2025-06-14T06:44:52.691-07:00",
-    "licenseCodes": [
-      "5511465778777431107"
-    ],
+    "lastAttachTimestamp": "2025-12-07T09:35:43.467-08:00",
+    "licenseCodes": ["5511465778777431107"],
     "licenses": [
       "https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/licenses/ubuntu-2204-lts"
     ],
-    "name": "confidential-service-tee",
+    "name": "cvm-1",
     "physicalBlockSizeBytes": "4096",
-    "selfLink": "https://www.googleapis.com/compute/v1/projects/confidential-infrastructure/zones/europe-west4-a/disks/confidential-service-tee",
+    "selfLink": "https://www.googleapis.com/compute/v1/projects/cvm-icdcs/zones/europe-west4-a/disks/cvm-1",
     "sizeGb": "30",
-    "sourceImage": "https://www.googleapis.com/compute/v1/projects/confidential-infrastructure/global/images/golden-reference-tee",
-    "sourceImageId": "4202736106201989844",
+    "sourceImage": "https://www.googleapis.com/compute/v1/projects/cvm-icdcs/global/images/golden-reference-tee",
+    "sourceImageId": "1708120587032331792",
     "status": "READY",
-    "type": "https://www.googleapis.com/compute/v1/projects/confidential-infrastructure/zones/europe-west4-a/diskTypes/pd-balanced",
+    "type": "https://www.googleapis.com/compute/v1/projects/cvm-icdcs/zones/europe-west4-a/diskTypes/pd-balanced",
     "users": [
-      "https://www.googleapis.com/compute/v1/projects/confidential-infrastructure/zones/europe-west4-a/instances/confidential-service-tee"
+      "https://www.googleapis.com/compute/v1/projects/cvm-icdcs/zones/europe-west4-a/instances/cvm-1"
     ],
-    "zone": "https://www.googleapis.com/compute/v1/projects/confidential-infrastructure/zones/europe-west4-a"
+    "zone": "https://www.googleapis.com/compute/v1/projects/cvm-icdcs/zones/europe-west4-a"
   },
   "reportData": "Qk1nQ2h6b2J4b2d6b2J4Qk1nQ2h6b2J4b2d6b2J4Qk1nQ2h6b2J4b2d6b2J4Qk1nQ2h6b2J4b2d6b2J4Qk1n2g=="
 }

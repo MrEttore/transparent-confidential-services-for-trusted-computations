@@ -1,0 +1,7 @@
+{
+  "data": {
+    "isVerified": false,
+    "message": "failed to verify attestation quote: unable to verify message digest using quote's signature and ecdsa attestation key",
+    "timestamp": "0001-01-01T00:00:00Z"
+  }
+}

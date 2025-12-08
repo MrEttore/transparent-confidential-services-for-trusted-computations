@@ -13,9 +13,9 @@ Together, these components operationalize the four attestation mechanisms highli
 
 ## Repository Layout
 
+- `artifacts/` - Reference attestation evidence bundles and verifier results that correspond to the framework’s artifact definitions in the paper.
 - `evidence-provider/` - Go service deployed inside the confidential VM. Talks to Intel TDX, the container runtime, and cloud metadata services to assemble evidence bundles. Includes a Dockerfile and an opinionated `deploy-and-run.sh` script for pushing binaries to a remote CVM via `gcloud`.
 - `evidence-verifier/` - Go service that implements the stateless Verifier Application. Provides HTTP endpoints for quote, workload, and infrastructure appraisal, returning structured attestation results.
-- `examples/` - Canonical evidence bundles and verification results cited in the paper, useful for offline inspection.
 - `infrastructure/` - Terraform configuration and bootstrap scripts that provision the Computational Logic Attester on Google Cloud with Intel TDX support. The `init-tee.sh` helper prepares Docker, Go, and the workload service inside the CVM.
 - `load-tests/` - K6 scripts and payloads used to characterize attestation latency under load.
 - `middleware/` - Nginx and Flask demo showing sticky-session strategies that keep multi-round attestation conversations anchored to a single CVM instance.
@@ -131,7 +131,7 @@ The Vite development server (default `http://localhost:5173`) renders the attest
 
 - **Middleware sticky-session demo (`middleware/`):** Illustrates the load-balancer affinity strategies needed to keep the challenge–response handshake attached to a single CVM. See the folder README for IP-hash versus cookie-based setups.
 - **Load testing (`load-tests/`):** K6 scripts reproduce the performance evaluation referenced in the paper. Adjust target URLs before running `k6 run ...`.
-- **Example artifacts (`examples/`):** Pre-captured JSON evidence and verification results align with the figures and discussion in the paper’s implementation and evaluation sections.
+- **Attestation artifacts (`artifacts/`):** Pre-captured JSON evidence and verification results align with the figures and discussion in the paper’s implementation and evaluation sections.
 
 ## Connecting Back to the Paper
 

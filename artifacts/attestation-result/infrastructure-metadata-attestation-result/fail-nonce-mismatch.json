@@ -1,0 +1,7 @@
+{
+  "data": {
+    "isVerified": false,
+    "message": "challenge mismatch: the reportData field does not match the issued challenge (nonce) by the Relying Party. The provided evidence is not valid for attestation",
+    "timestamp": "0001-01-01T00:00:00Z"
+  }
+}

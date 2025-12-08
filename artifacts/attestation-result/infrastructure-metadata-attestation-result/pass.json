@@ -1,0 +1,9 @@
+{
+  "data": {
+    "isVerified": true,
+    "message": "infrastructure successfully verified",
+    "verifiedBootDiskSourceImage": "https://www.googleapis.com/compute/v1/projects/cvm-icdcs/global/images/golden-reference-tee",
+    "verifiedBootDiskSourceImageID": "1708120587032331792",
+    "timestamp": "0001-01-01T00:00:00Z"
+  }
+}

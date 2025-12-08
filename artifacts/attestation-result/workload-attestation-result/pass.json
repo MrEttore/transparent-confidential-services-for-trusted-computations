@@ -2,8 +2,8 @@
   "data": {
     "isVerified": true,
     "message": "successfully verified image for workload 'llm-core'",
-    "goldenImageDigest": "sha256:1fa274d318656b6cdf70210930ad8dee5069e6c93765937d8af41013ec0db5f6",
-    "providedImageDigest": "sha256:1fa274d318656b6cdf70210930ad8dee5069e6c93765937d8af41013ec0db5f6",
+    "goldenImageDigest": "sha256:435faa6db70075a575dd54e2a1e76cee14bd53fb67be4fdfa3736d879b9f1ccb",
+    "providedImageDigest": "sha256:435faa6db70075a575dd54e2a1e76cee14bd53fb67be4fdfa3736d879b9f1ccb",
     "referenceImage": "sanctuairy/llm-core:latest",
     "timestamp": "0001-01-01T00:00:00Z"
   }
