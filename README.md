@@ -15,11 +15,12 @@ Together, these components operationalize the four attestation mechanisms highli
 
 - `evidence-provider/` - Go service deployed inside the confidential VM. Talks to Intel TDX, the container runtime, and cloud metadata services to assemble evidence bundles. Includes a Dockerfile and an opinionated `deploy-and-run.sh` script for pushing binaries to a remote CVM via `gcloud`.
 - `evidence-verifier/` - Go service that implements the stateless Verifier Application. Provides HTTP endpoints for quote, workload, and infrastructure appraisal, returning structured attestation results.
-- `relying-application/` - React single-page application. The `features/attestation` feature renders the user-facing attestation flow, issues fresh challenges, and presents evidence and verifier verdicts.
-- `infrastructure/` - Terraform configuration and bootstrap scripts that provision the Computational Logic Attester on Google Cloud with Intel TDX support. The `init-tee.sh` helper prepares Docker, Go, and the workload service inside the CVM.
-- `middleware/` - Nginx and Flask demo showing sticky-session strategies that keep multi-round attestation conversations anchored to a single CVM instance.
 - `examples/` - Canonical evidence bundles and verification results cited in the paper, useful for offline inspection.
+- `infrastructure/` - Terraform configuration and bootstrap scripts that provision the Computational Logic Attester on Google Cloud with Intel TDX support. The `init-tee.sh` helper prepares Docker, Go, and the workload service inside the CVM.
 - `load-tests/` - K6 scripts and payloads used to characterize attestation latency under load.
+- `middleware/` - Nginx and Flask demo showing sticky-session strategies that keep multi-round attestation conversations anchored to a single CVM instance.
+- `reference-value-provider/` - Repository-backed reference manifests that stand in for the external baseline registry used by the verifier.
+- `relying-application/` - React single-page application. The `features/attestation` feature renders the user-facing attestation flow, issues fresh challenges, and presents evidence and verifier verdicts.
 
 ## Implemented Framework Roles
 
@@ -41,7 +42,9 @@ The React-based relying party component executes entirely in the user’s client
 
 ### Reference Value Provider (`reference-value-provider/`)
 
-...
+The Reference Value Provider maintains the public, tamper-evident baselines that anchor the verifier’s trust decisions. In the deployed framework, these references live in independent registries (for example Sigstore for manifests and Docker Hub for signed container images) so that clients can audit them without involving the service operator. For demonstration, this repository embeds a minimal provider in `reference-value-provider/`, publishing a signed `baseline-manifest.jsonc` that captures the golden CVM image, TDX launch measurements (`mrTd`, `mrSeam`, `teeTcbSvn`, `tdAttributes`, `xfam`), and provenance metadata such as the source image URI and ID. The Evidence Verifier resolves workload digests and infrastructure claims against these artifacts, ensuring that the attested CVM and containers match the public, immutable baselines described in the paper’s model.
+
+Additional implementation notes live in [`reference-value-provider/README.md`](reference-value-provider/README.md).
 
 ## Running the Prototype
 
