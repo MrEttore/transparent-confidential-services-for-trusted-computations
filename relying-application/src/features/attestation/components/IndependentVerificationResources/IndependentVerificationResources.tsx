@@ -8,39 +8,39 @@ export default function IndependentVerificationResources() {
                 <Header />
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                     <VerificationResource
-                        name="Inference workload container"
-                        description="Container image that runs the confidential inference pipeline for the shared dataset."
-                        resourceLink="https://hub.docker.com/r/confidential-service/llm-core/tags"
+                        name="Confidential workload container"
+                        description="Container image that runs the confidential workload inside the TEE."
+                        resourceLink="https://hub.docker.com/r/sanctuairy/llm-core/tags"
                         linkPlaceholder="View on Docker Hub"
                     />
                     <VerificationResource
-                        name="Model management API container"
-                        description="Supporting service responsible for loading, configuring, and monitoring the protected AI model."
-                        resourceLink="https://hub.docker.com/r/confidential-service/llm-manager/tags"
+                        name="Service's backend logic container"
+                        description="Additional container image part of the distributed confidential computing service's backend."
+                        resourceLink="https://hub.docker.com/r/sanctuairy/llm-manager/tags"
                         linkPlaceholder="View on Docker Hub"
                     />
                     <VerificationResource
-                        name="Client portal container"
-                        description="Web interface that lets users trigger attestation and manage data sharing sessions."
-                        resourceLink="https://hub.docker.com/r/confidential-service/frontend/tags"
+                        name="Relying application container"
+                        description="Container image for the UI application that users interact with."
+                        resourceLink="https://hub.docker.com/r/sanctuairy/frontend/tags"
                         linkPlaceholder="View on Docker Hub"
                     />
                     <VerificationResource
-                        name="Gateway container"
-                        description="Entry point routing encrypted requests from the data sharing feature into the confidential cluster."
+                        name="Middleware container"
+                        description="Container image for the API gateway or load balancer that handles requests between the relying application and the CVM."
                         resourceLink="https://hub.docker.com/r/confidential-service/api-gateway/tags"
                         linkPlaceholder="View on Docker Hub"
                     />
                     <VerificationResource
-                        name="Independent verifier container"
-                        description="Reference implementation you can run yourself to double check attestation evidence."
-                        resourceLink="https://hub.docker.com/r/confidential-service/evidence-verifier/tags"
+                        name="Verifier application container"
+                        description="Container image that runs the Evidence Provider service to verify attestation evidence."
+                        resourceLink="https://hub.docker.com/r/attestify/evidenceverifier/tags"
                         linkPlaceholder="View on Docker Hub"
                     />
                     <VerificationResource
                         name="Baseline manifest repository"
-                        description="Policy-controlled measurements describing the trusted infrastructure that should process uploaded records."
-                        resourceLink="https://github.com/example-org/confidential-service-baselines"
+                        description="The baseline manifest used by the verifier service to audit the confidential service's TEE and infrastructure configuration."
+                        resourceLink="https://github.com/MrEttore/transparent-confidential-services-for-trusted-computations/tree/evaluation/reference-value-provider"
                         linkPlaceholder="View on GitHub"
                     />
                 </div>
