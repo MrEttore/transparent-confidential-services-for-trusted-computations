@@ -1,0 +1,5 @@
+- job_name: evidenceprovider
+  metrics_path: /metrics
+  static_configs:
+    - targets:
+        - 'EVIDENCE_PROVIDER_HOST:EVIDENCE_PROVIDER_PORT'
