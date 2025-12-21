@@ -6,9 +6,9 @@ scrape_configs:
     metrics_path: /metrics
     static_configs:
       - targets:
-          - '34.7.214.206:8081'
-          - '34.158.65.214:8081'
-          - '34.12.85.105:8081'
+          - '34.7.214.206:8080'
+          - '34.158.65.214:8080'
+          - '34.12.85.105:8080'
 
   - job_name: evidenceverifier
     metrics_path: /metrics
