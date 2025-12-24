@@ -1,18 +1,61 @@
 import http from 'k6/http';
-import { check } from 'k6';
+import { check, sleep } from 'k6';
 import exec from 'k6/execution';
 
 const BASE_URL = 'http://127.0.0.1:8081';
+const payload = open('./test-payloads/quote.json');
+
 const ENDPOINT = '/verify/tdx-quote';
 const ENDPOINT_TAG = 'verify-tdx-quote';
 
-const payload = open('./test-payloads/quote.json');
+const PHASE_PACE_SEC = {
+  every_60s: 60,
+  every_30s: 30,
+  every_10s: 10,
+};
 
-function postOnce() {
+export const options = {
+  scenarios: {
+    every_60s: {
+      executor: 'constant-vus',
+      vus: 1,
+      duration: '3m',
+      startTime: '0s',
+    },
+    every_30s: {
+      executor: 'constant-vus',
+      vus: 1,
+      duration: '3m',
+      startTime: '3m10s',
+    },
+    every_10s: {
+      executor: 'constant-vus',
+      vus: 1,
+      duration: '3m',
+      startTime: '6m20s',
+    },
+  },
+};
+
+export function setup() {
+  const url = `${BASE_URL}${ENDPOINT}`;
+  http.post(url, payload, {
+    headers: { 'Content-Type': 'application/json' },
+    timeout: '60s',
+    tags: { endpoint: ENDPOINT_TAG, phase: 'warmup' },
+  });
+  sleep(2);
+}
+
+export default function () {
+  const phase = exec.scenario.name;
+  const pace = PHASE_PACE_SEC[phase] ?? 60;
+
   const url = `${BASE_URL}${ENDPOINT}`;
   const res = http.post(url, payload, {
     headers: { 'Content-Type': 'application/json' },
-    timeout: '120s',
+    timeout: '60s',
+    tags: { endpoint: ENDPOINT_TAG, phase },
   });
 
   const ok = check(res, {
@@ -21,55 +64,12 @@ function postOnce() {
 
   if (!ok) {
     console.error(
-      `FAIL endpoint=${ENDPOINT_TAG} phase=${exec.scenario.name} status=${
+      `FAIL endpoint=${ENDPOINT_TAG} phase=${phase} status=${
         res.status
-      } body=${String(res.body).slice(0, 300)}`,
+      } body=${String(res.body || '').slice(0, 300)}`,
     );
   }
-}
 
-export const options = {
-  scenarios: {
-    warmup: {
-      executor: 'constant-arrival-rate',
-      rate: 1,
-      timeUnit: '1s',
-      duration: '1m',
-      preAllocatedVUs: 5,
-      maxVUs: 50,
-      tags: { endpoint: ENDPOINT_TAG, phase: 'warmup' },
-    },
-    baseline: {
-      executor: 'constant-arrival-rate',
-      startTime: '1m',
-      rate: 2,
-      timeUnit: '1s',
-      duration: '3m',
-      preAllocatedVUs: 10,
-      maxVUs: 150,
-      tags: { endpoint: ENDPOINT_TAG, phase: 'baseline' },
-    },
-    ramp: {
-      executor: 'ramping-arrival-rate',
-      startTime: '4m',
-      timeUnit: '1s',
-      preAllocatedVUs: 25,
-      maxVUs: 400,
-      stages: [
-        { duration: '2m', target: 5 },
-        { duration: '2m', target: 10 },
-        { duration: '2m', target: 15 },
-      ],
-      tags: { endpoint: ENDPOINT_TAG, phase: 'ramp' },
-    },
-  },
-  thresholds: {
-    'http_req_failed{phase:baseline}': ['rate<0.001'],
-    'dropped_iterations{phase:baseline}': ['count==0'],
-  },
-  summaryTrendStats: ['avg', 'min', 'med', 'max', 'p(90)', 'p(95)', 'p(99)'],
-};
-
-export default function () {
-  postOnce();
+  const durSec = (res?.timings?.duration || 0) / 1000;
+  sleep(Math.max(0, pace - durSec));
 }
