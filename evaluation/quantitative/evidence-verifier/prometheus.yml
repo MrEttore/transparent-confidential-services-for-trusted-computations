@@ -1,9 +1,0 @@
-global:
-  scrape_interval: 15s
-
-scrape_configs:
-  - job_name: evidenceverifier
-    scheme: https
-    metrics_path: /metrics
-    static_configs:
-      - targets: ['EVIDENCE_VERIFIER_HOST:EVIDENCE_VERIFIER_PORT']

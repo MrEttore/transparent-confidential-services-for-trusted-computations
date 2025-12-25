@@ -1,41 +1,37 @@
 {
   "issuedChallenge": "Qk1nQ2h6b2J4b2d6b2J4Qk1nQ2h6b2J4b2d6b2J4Qk1nQ2h6b2J4b2d6b2J4Qk1nQ2h6b2J4b2d6b2J4Qk1n2g==",
-
   "referenceImage": {
     "namespace": "sanctuairy",
     "repository": "llm-core",
     "tag": "latest"
   },
-
   "evidence": {
     "containers": [
       {
-        "id": "03e3f866ecac8d974eb607e0827b3d7eece6470ac435d7e1d496a772ede2e264",
+        "id": "d10f1a76c82eb7cf65cf50eba8865523959505b0ffcb99eee1f509684781eeb0",
         "name": "llm-core",
         "image": "sanctuairy/llm-core:latest",
-        "imageDigest": "sha256:8a8e1017c3bac37e882ab2ce25b5415f1a315095bbc6e9de24e6d8428299b400",
+        "imageDigest": "sha256:435faa6db70075a575dd54e2a1e76cee14bd53fb67be4fdfa3736d879b9f1ccb",
         "state": "running",
-        "startedAt": "2025-06-15T09:24:50.860084243Z",
+        "startedAt": "2025-12-23T13:34:34.381885919Z",
         "labels": {
           "org.opencontainers.image.ref.name": "ubuntu",
-          "org.opencontainers.image.version": "20.04"
+          "org.opencontainers.image.version": "24.04"
         }
       }
     ],
     "images": [
       {
-        "id": "sha256:78a811acb0492e353972ae409aa0b3d04870103c6ab893acc3ad98a5e4362605",
-        "repoTags": [
-          "sanctuairy/llm-core:latest"
-        ],
+        "id": "sha256:435faa6db70075a575dd54e2a1e76cee14bd53fb67be4fdfa3736d879b9f1ccb",
+        "repoTags": ["sanctuairy/llm-core:latest"],
         "repoDigests": [
-          "sanctuairy/llm-core@sha256:ef903eae47acc61ad494fcfe5eb51441cb81465e6131f3532bcb9309eb4210e0"
+          "sanctuairy/llm-core@sha256:1fc562c7ec052c28bd87c1e0d788a2f542fd177559e78a5db9cfd258db0b3d51"
         ],
-        "created": "2025-06-13T12:43:15.182901862Z",
-        "size": 3457598071,
+        "created": "2025-11-13T13:35:24.498087954Z",
+        "size": 3653158191,
         "labels": {
           "org.opencontainers.image.ref.name": "ubuntu",
-          "org.opencontainers.image.version": "20.04"
+          "org.opencontainers.image.version": "24.04"
         }
       }
     ],
