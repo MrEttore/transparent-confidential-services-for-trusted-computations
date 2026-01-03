@@ -1,20 +1,57 @@
 package infrastructure
 
 import (
-	"cloud.google.com/go/compute/metadata"
 	"context"
 	"fmt"
+	"log"
+	"net/http"
+	"time"
+
+	"cloud.google.com/go/compute/metadata"
+	"github.com/MrEttore/Attestify/evidenceprovider/internal/service/mock"
 	"github.com/MrEttore/Attestify/evidenceprovider/internal/types"
 	"github.com/MrEttore/Attestify/evidenceprovider/internal/util"
 	"google.golang.org/api/compute/v1"
 	"google.golang.org/api/option"
-	"net/http"
-	"time"
 )
 
 // FetchEvidence retrieves infrastructure evidence based on the detected cloud provider.
 // It gathers metadata, instance details, and disk information for supported providers.
+// If MOCK_MODE environment variable is set, returns sample mock data for local development.
 func FetchEvidence(ctx context.Context, challenge string) (types.InfrastructureEvidence, error) {
+	// Check for mock mode (local development without cloud provider)
+	if mock.IsMockMode() {
+		log.Println("🔧 Mock mode enabled: returning sample infrastructure evidence")
+		return types.InfrastructureEvidence{
+			Summary: &types.InfrastructureSummary{
+				Provider:    "Google Cloud Platform (Mock)",
+				InstanceID:  "9214714451018122242",
+				Name:        "cvm-1-mock",
+				Zone:        "europe-west4-a",
+				MachineType: "c3-standard-4",
+				Status:      "RUNNING",
+				ProjectID:   "cvm-icdcs-mock",
+			},
+			Instance: &compute.Instance{
+				Name:              "cvm-1-mock",
+				Id:                9214714451018122242,
+				CpuPlatform:       "Intel Sapphire Rapids",
+				Status:            "RUNNING",
+				CreationTimestamp: "2025-12-07T09:35:41.982-08:00",
+				ConfidentialInstanceConfig: &compute.ConfidentialInstanceConfig{
+					ConfidentialInstanceType: "TDX",
+				},
+			},
+			Disk: &compute.Disk{
+				Name:        "cvm-1-mock",
+				Id:          9057367825912955906,
+				SizeGb:      30,
+				Status:      "READY",
+				SourceImage: "https://www.googleapis.com/compute/v1/projects/cvm-icdcs/global/images/golden-reference-tee",
+			},
+			ReportData: challenge,
+		}, nil
+	}
 
 	summary := &types.InfrastructureSummary{}
 	var instance *compute.Instance

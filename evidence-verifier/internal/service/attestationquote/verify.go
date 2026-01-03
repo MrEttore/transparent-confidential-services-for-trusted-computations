@@ -3,8 +3,11 @@ package attestationquote
 import (
 	"encoding/json"
 	"fmt"
+	"log"
+
 	"github.com/MrEttore/Attestify/evidenceverifier/internal/service/challenge"
 	"github.com/MrEttore/Attestify/evidenceverifier/internal/service/manifest"
+	"github.com/MrEttore/Attestify/evidenceverifier/internal/service/mock"
 	"github.com/MrEttore/Attestify/evidenceverifier/internal/types"
 
 	"github.com/google/go-tdx-guest/proto/tdx"
@@ -15,8 +18,39 @@ import (
 // Verify parses the given JSON-encoded TDX quote and runs
 // the attestation checks (including collateral fetch and revocation).
 //
+// If MOCK_MODE is enabled, skips hardware quote verification (for local development).
+//
 // It returns a VerificationResult indicating pass/fail.
-func Verify(issuedChallenge, manifestUrl string, evidenceQuote types.Quote) (types.VerificationReport, error) {
+func Verify(issuedChallenge, manifestUrl, tlsFingerprint string, evidenceQuote types.Quote) (types.VerificationReport, error) {
+	// Check for mock mode (local development without real TDX quotes)
+	if mock.IsMockMode() {
+		log.Println("🔧 Mock mode enabled: skipping TDX quote hardware verification")
+
+		// 1. Verify the challenge issued by the Relying Party (still verify this in mock mode)
+		var err error
+		if tlsFingerprint != "" {
+			err = challenge.VerifyWithTlsBinding(issuedChallenge, tlsFingerprint, evidenceQuote.TdQuoteBody.ReportData)
+		} else {
+			err = challenge.Verify(issuedChallenge, evidenceQuote.TdQuoteBody.ReportData)
+		}
+
+		if err != nil {
+			return types.VerificationReport{
+				IsVerified: false,
+				Message:    err.Error(),
+			}, nil
+		}
+
+		// 2. Verify the tdx quote evidence against the Reference Value Provider's manifest
+		// Skip this in mock mode since the mock values won't match
+		log.Println("🔧 Mock mode: skipping manifest verification")
+
+		return types.VerificationReport{
+			IsVerified: true,
+			Message:    "tdx quote verified (mock mode - hardware verification skipped)",
+		}, nil
+	}
+
 	var quote tdx.QuoteV4
 	quoteBytes, _ := json.Marshal(evidenceQuote)
 	quoteStr := string(quoteBytes)
@@ -26,7 +60,12 @@ func Verify(issuedChallenge, manifestUrl string, evidenceQuote types.Quote) (typ
 	}
 
 	// 1. Verify the challenge issued by the Relying Party.
-	err := challenge.Verify(issuedChallenge, evidenceQuote.TdQuoteBody.ReportData)
+	var err error
+	if tlsFingerprint != "" {
+		err = challenge.VerifyWithTlsBinding(issuedChallenge, tlsFingerprint, evidenceQuote.TdQuoteBody.ReportData)
+	} else {
+		err = challenge.Verify(issuedChallenge, evidenceQuote.TdQuoteBody.ReportData)
+	}
 	if err != nil {
 		return types.VerificationReport{
 			IsVerified: false,

@@ -1,0 +1,33 @@
+services:
+  evidence-provider:
+    build:
+      context: ./evidence-provider
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "8443:443"
+    environment:
+      - MOCK_MODE=true
+    restart: unless-stopped
+
+  evidence-verifier:
+    build:
+      context: ./evidence-verifier
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - MOCK_MODE=true
+    restart: unless-stopped
+
+  relying-application:
+    build:
+      context: ./relying-application
+      dockerfile: Dockerfile
+      args:
+        VITE_ATTESTER_URL: http://localhost:8080
+        VITE_VERIFIER_URL: http://localhost:8081
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+

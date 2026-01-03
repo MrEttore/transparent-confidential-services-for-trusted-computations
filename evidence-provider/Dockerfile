@@ -12,10 +12,27 @@ RUN go build -o evidenceprovider ./cmd/evidenceprovider
 # Final image
 FROM alpine:latest
 
+# Install nginx
+RUN apk add --no-cache nginx
+
 WORKDIR /app
 
+# Copy the Go binary
 COPY --from=builder /app/evidenceprovider .
 
-EXPOSE 8080
+# Copy nginx config
+COPY nginx.conf /etc/nginx/nginx.conf
 
-CMD ["./evidenceprovider"]
+# Copy entrypoint
+COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
+
+# Create SSL directory
+RUN mkdir -p /app/ssl
+
+# Create nginx log directory
+RUN mkdir -p /var/log/nginx
+
+EXPOSE 80 443 8080
+
+CMD ["./entrypoint.sh"]

@@ -3,6 +3,9 @@ package workload
 import (
 	"context"
 	"fmt"
+	"log"
+
+	"github.com/MrEttore/Attestify/evidenceprovider/internal/service/mock"
 	"github.com/MrEttore/Attestify/evidenceprovider/internal/types"
 	"github.com/MrEttore/Attestify/evidenceprovider/internal/util"
 	"github.com/docker/docker/api/types/container"
@@ -10,7 +13,44 @@ import (
 )
 
 // FetchEvidence gathers evidence from running containers and their associated images.
+// If MOCK_MODE environment variable is set, returns sample mock data for local development.
 func FetchEvidence(ctx context.Context, challenge string) (types.WorkloadEvidence, error) {
+	// Check for mock mode (local development without Docker daemon)
+	if mock.IsMockMode() {
+		log.Println("🔧 Mock mode enabled: returning sample workload evidence")
+		return types.WorkloadEvidence{
+			Containers: []types.ContainerEvidence{
+				{
+					ID:          "90f62b5f43c6a1c06e6df91d97476fbf6d624e30663c4fabf3400ef40886cbe7",
+					Name:        "llm-core",
+					Image:       "sanctuairy/llm-core:latest",
+					ImageDigest: "sha256:435faa6db70075a575dd54e2a1e76cee14bd53fb67be4fdfa3736d879b9f1ccb",
+					State:       "running",
+					StartedAt:   "2025-12-08T13:41:20.710779927Z",
+					Labels: map[string]string{
+						"org.opencontainers.image.ref.name": "ubuntu",
+						"org.opencontainers.image.version":  "24.04",
+					},
+				},
+			},
+			Images: []types.ImageEvidence{
+				{
+					ID:       "sha256:435faa6db70075a575dd54e2a1e76cee14bd53fb67be4fdfa3736d879b9f1ccb",
+					RepoTags: []string{"sanctuairy/llm-core:latest"},
+					RepoDigests: []string{
+						"sanctuairy/llm-core@sha256:1fc562c7ec052c28bd87c1e0d788a2f542fd177559e78a5db9cfd258db0b3d51",
+					},
+					Created: "2025-11-13T13:35:24.498087954Z",
+					Size:    3653158191,
+					Labels: map[string]string{
+						"org.opencontainers.image.ref.name": "ubuntu",
+						"org.opencontainers.image.version":  "24.04",
+					},
+				},
+			},
+			ReportData: challenge,
+		}, nil
+	}
 
 	cli, err := client.NewClientWithOpts(
 		client.FromEnv, client.WithAPIVersionNegotiation())

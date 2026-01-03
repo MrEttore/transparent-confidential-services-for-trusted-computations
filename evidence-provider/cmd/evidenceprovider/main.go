@@ -5,10 +5,18 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/MrEttore/Attestify/evidenceprovider/internal/service/tlscertificate"
 	transport "github.com/MrEttore/Attestify/evidenceprovider/internal/transport/http"
 )
 
 func main() {
+	// Generate TLS certificate at startup
+	if err := tlscertificate.InitCertificate(); err != nil {
+		log.Printf("⚠️  TLS certificate generation failed: %v", err)
+	} else {
+		log.Printf("🔐 TLS certificate fingerprint: %s...", tlscertificate.GetFingerprint()[:32])
+	}
+
 	router := transport.NewRouter()
 	handler := transport.WithCORS(router)
 
