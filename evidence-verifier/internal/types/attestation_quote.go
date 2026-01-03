@@ -9,9 +9,10 @@ package types
 //	  "quote": { ... }
 //	}
 type VerifyTdxQuoteRequest struct {
-	IssuedChallenge     string `json:"issuedChallenge" validate:"required"`
-	BaselineManifestUrl string `json:"baselineManifestUrl" validate:"required,url"`
-	Quote               Quote  `json:"quote" validate:"required"`
+	IssuedChallenge           string `json:"issuedChallenge" validate:"required"`
+	BaselineManifestUrl       string `json:"baselineManifestUrl" validate:"required,url"`
+	TlsCertificateFingerprint string `json:"tlsCertificateFingerprint"` // Optional: for TLS binding verification
+	Quote                     Quote  `json:"quote" validate:"required"`
 }
 
 // Quote represents the TDX attestation quote structure

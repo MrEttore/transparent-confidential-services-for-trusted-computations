@@ -2,12 +2,13 @@ package handler
 
 import (
 	"encoding/json"
+	"log"
+	"net/http"
+
 	"github.com/MrEttore/Attestify/evidenceverifier/internal/service/attestationquote"
 	"github.com/MrEttore/Attestify/evidenceverifier/internal/types"
 	"github.com/MrEttore/Attestify/evidenceverifier/internal/util"
 	"github.com/go-playground/validator/v10"
-	"log"
-	"net/http"
 )
 
 // VerifyTdxQuote is an HTTP handler that accepts a JSON-encoded TDX quote,
@@ -35,9 +36,10 @@ func VerifyTdxQuote(w http.ResponseWriter, r *http.Request) {
 	// ## BUSINESS LOGIC ##
 	issuedChallenge := reqBody.IssuedChallenge
 	manifestUrl := reqBody.BaselineManifestUrl
+	tlsFingerprint := reqBody.TlsCertificateFingerprint
 	evidenceQuote := reqBody.Quote
 
-	verification, err := attestationquote.Verify(issuedChallenge, manifestUrl, evidenceQuote)
+	verification, err := attestationquote.Verify(issuedChallenge, manifestUrl, tlsFingerprint, evidenceQuote)
 	if err != nil {
 		util.RespondWithError(w, http.StatusUnprocessableEntity, err.Error())
 		return
