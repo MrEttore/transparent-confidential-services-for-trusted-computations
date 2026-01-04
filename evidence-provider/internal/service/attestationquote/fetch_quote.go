@@ -2,6 +2,9 @@ package attestationquote
 
 import (
 	"fmt"
+	"log"
+
+	"github.com/MrEttore/Attestify/evidenceprovider/internal/service/mock"
 	"github.com/google/go-tdx-guest/client"
 	"github.com/google/go-tdx-guest/proto/tdx"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -11,6 +14,8 @@ import (
 // It interacts with the TDX Quote Provider to fetch the attestation quote, converts it to JSON format,
 // and returns it as a string.
 //
+// If MOCK_MODE environment variable is set, returns sample mock data for local development.
+//
 // Parameters:
 //   - userData: A fixed-length array ([64]byte) containing the user data to be included in the attestation quote.
 //
@@ -18,6 +23,12 @@ import (
 //   - string: The attestation quote in JSON format.
 //   - error: An error if the quote retrieval or conversion fails.
 func FetchEvidence(userData [64]byte) (string, error) {
+	// Check for mock mode (local development without TDX hardware)
+	if mock.IsMockMode() {
+		log.Println("🔧 Mock mode enabled: returning sample TDX quote")
+		return mock.MockTDXQuote(userData), nil
+	}
+
 	quoteProvider, err := client.GetQuoteProvider()
 	if err != nil {
 		return "", fmt.Errorf("failed to get Quote Provider: %v", err)

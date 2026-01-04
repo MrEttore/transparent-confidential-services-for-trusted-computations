@@ -1,9 +1,10 @@
 package http
 
 import (
+	"net/http"
+
 	"github.com/MrEttore/Attestify/evidenceprovider/internal/metrics"
 	"github.com/prometheus/client_golang/prometheus"
-	"net/http"
 
 	"github.com/MrEttore/Attestify/evidenceprovider/internal/handler"
 	"github.com/gorilla/mux"
@@ -30,6 +31,11 @@ func NewRouter() http.Handler {
 	r.Handle("/evidence/infrastructure", promhttp.InstrumentHandlerDuration(
 		metrics.ReqDuration.MustCurryWith(prometheus.Labels{"route": "evidence_infrastructure"}),
 		http.HandlerFunc(handler.GetInfrastructureSummary),
+	)).Methods("POST")
+
+	r.Handle("/evidence/tls-certificate", promhttp.InstrumentHandlerDuration(
+		metrics.ReqDuration.MustCurryWith(prometheus.Labels{"route": "evidence_tls_certificate"}),
+		http.HandlerFunc(handler.GetTlsCertificate),
 	)).Methods("POST")
 
 	r.Handle("/metrics", promhttp.Handler()).Methods("GET")
