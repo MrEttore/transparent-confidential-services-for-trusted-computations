@@ -30,11 +30,15 @@ Terraform modules create a confidential VM on Google Cloud, configure firewall i
 
 ### Evidence Provider (`evidence-provider/`)
 
-Built in Go, the Evidence Provider runs alongside the confidential workload inside the Intel TDX-based CVM. It exposes REST endpoints that accept a base64 challenge, acquire a hardware quote via `go-tdx-guest`, query Docker for the live container digest, and capture provenance from Google Cloud metadata. All evidence types are bound to the caller’s nonce before being returned as JSON, enabling the freshness guarantees discussed in the paper. Detailed endpoint documentation lives in [`evidence-provider/README.md`](evidence-provider/README.md).
+Built in Go, the Evidence Provider runs alongside the confidential workload inside the Intel TDX-based CVM. It exposes REST endpoints that accept a base64 challenge, acquire a hardware quote via `go-tdx-guest`, query Docker for the live container digest, and capture provenance from Google Cloud metadata. All evidence types are bound to the caller's nonce before being returned as JSON, enabling the freshness guarantees discussed in the paper.
+
+The service generates a self-signed TLS certificate at startup and includes its SHA-256 fingerprint in the attestation quote's `reportData` field, implementing **TLS-bound attestation**. This binds the attested hardware identity to the TLS session, ensuring that the relying party communicates with the same CVM that produced the quote. The binding follows the formula: `reportData = SHA256(challenge || tlsCertificateFingerprint)`, allowing the verifier to cryptographically link the TLS handshake to the attestation evidence.
+
+Detailed endpoint documentation lives in [`evidence-provider/README.md`](evidence-provider/README.md).
 
 ### Verifier Application (`evidence-verifier/`)
 
-The Verifier is a stateless Go service intended to execute in a client-controlled or auditor-controlled environment. Each endpoint parses the submitted evidence, fetches public reference values (Intel endorsement certificates, workload digests, infrastructure manifests), and emits an appraisal result. Because no hidden state is kept server-side, third parties can reproduce verdicts, satisfying the paper’s verifiability requirement. Endpoint-level request/response details are captured in [`evidence-verifier/README.md`](evidence-verifier/README.md).
+The Verifier is a stateless Go service intended to execute in a client-controlled or auditor-controlled environment. Each endpoint parses the submitted evidence, fetches public reference values (Intel endorsement certificates, workload digests, infrastructure manifests), and emits an appraisal result. The verifier supports **TLS-bound attestation** by validating that the quote's `reportData` field correctly encodes `SHA256(challenge || tlsCertificateFingerprint)`, ensuring the attested CVM matches the TLS endpoint. Because no hidden state is kept server-side, third parties can reproduce verdicts, satisfying the paper's verifiability requirement. Endpoint-level request/response details are captured in [`evidence-verifier/README.md`](evidence-verifier/README.md).
 
 ### Relying Application (`relying-application/src/features/attestation`)
 
@@ -138,6 +142,94 @@ The Vite development server (default `http://localhost:5173`) renders the attest
 Each directory in this repository maps directly to the system roles and mechanisms introduced in the paper’s implementation section:
 
 - **Nonce-bound attestation** is realized by the Evidence Provider’s challenge-binding handlers and the Relying Application’s challenge generator.
+- **TLS-bound attestation** extends nonce binding by cryptographically linking the hardware quote to the TLS certificate fingerprint, ensuring the attested CVM identity matches the TLS endpoint.
 - **Verifiable evidence bundles** materialize as the JSON payloads returned by the Evidence Provider and validated by the Evidence Verifier against public registries (Intel PCKs, Docker image digests, GitHub-hosted manifests).
 - **Workload integrity validation** is enforced through the workload endpoints and Terraform-managed golden images, ensuring the runtime matches published digests.
 - **Transparent user interaction** is implemented in the React feature layer, which exposes every protocol step, underlying artifact, and independent replay resources.
+
+## Testing and Development
+
+### Local Testing with Mock Mode
+
+For rapid development and integration testing without access to Intel TDX hardware, the repository includes a mock mode that simulates hardware attestation primitives. This allows you to test the complete attestation flow locally using Docker Compose.
+
+**Prerequisites:**
+
+- Docker and Docker Compose
+- curl (for making HTTP requests)
+- jq (recommended, for parsing JSON)
+
+#### Quick Start
+
+Start all services in mock mode:
+
+```bash
+docker-compose up --build
+```
+
+The Evidence Provider runs on port 8080 (HTTP) and 8443 (HTTPS), the Evidence Verifier on port 8081, and the Relying Application on port 3000.
+
+#### Manual Testing Flow
+
+Test the TLS-bound attestation flow step by step:
+
+```bash
+# 1. Generate a challenge (64-byte base64 nonce)
+export CHALLENGE_B64="MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMw=="
+
+# 2. Request a TDX quote from the Evidence Provider
+RESPONSE=$(curl -k -s -X POST https://localhost:8443/evidence/tdx-quote \
+  -H "Content-Type: application/json" \
+  -d "{\"challenge\": \"$CHALLENGE_B64\"}")
+
+# 3. Extract the quote and TLS certificate fingerprint
+export QUOTE=$(echo $RESPONSE | jq -r '.data.quote')
+export FINGERPRINT=$(echo $RESPONSE | jq -r '.data.tlsCertificateFingerprint')
+
+# 4. Verify the quote with the Evidence Verifier
+curl -s -X POST http://localhost:8081/verify/tdx-quote \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"issuedChallenge\": \"$CHALLENGE_B64\",
+    \"baselineManifestUrl\": \"http://example.com/manifest\",
+    \"tlsCertificateFingerprint\": \"$FINGERPRINT\",
+    \"quote\": $QUOTE
+  }" | jq .
+```
+
+Expected result in mock mode:
+
+```json
+{
+  "status": "success",
+  "data": {
+    "isVerified": true,
+    "message": "tdx quote verified (mock mode - hardware verification skipped)"
+  }
+}
+```
+
+#### Automated Test Script
+
+Run the complete flow with a single command:
+
+```bash
+CHALLENGE="MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMw=="
+
+echo "Fetching Quote via HTTPS..."
+RESP=$(curl -k -s -X POST https://localhost:8443/evidence/tdx-quote -d "{\"challenge\": \"$CHALLENGE\"}")
+QUOTE=$(echo $RESP | jq -r '.data.quote')
+FINGERPRINT=$(echo $RESP | jq -r '.data.tlsCertificateFingerprint')
+
+echo "Verifying..."
+curl -s -X POST http://localhost:8081/verify/tdx-quote \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"issuedChallenge\": \"$CHALLENGE\",
+    \"baselineManifestUrl\": \"http://example.com/manifest\",
+    \"tlsCertificateFingerprint\": \"$FINGERPRINT\",
+    \"quote\": $QUOTE
+  }" | jq .
+```
+
+Mock mode uses simulated TDX quotes and skips cryptographic verification of Intel signatures, making it suitable for development workflows. For production validation, deploy to actual Intel TDX-enabled hardware following the instructions in the "Running the Prototype" section above.
