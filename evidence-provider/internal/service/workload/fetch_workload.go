@@ -13,11 +13,12 @@ import (
 )
 
 // FetchEvidence gathers evidence from running containers and their associated images.
+//
 // If MOCK_MODE environment variable is set, returns sample mock data for local development.
 func FetchEvidence(ctx context.Context, challenge string) (types.WorkloadEvidence, error) {
-	// Check for mock mode (local development without Docker daemon)
 	if mock.IsMockMode() {
-		log.Println("🔧 Mock mode enabled: returning sample workload evidence")
+		log.Println("Mock mode enabled: returning sample workload evidence")
+
 		return types.WorkloadEvidence{
 			Containers: []types.ContainerEvidence{
 				{

@@ -15,7 +15,7 @@ type GetTlsCertificateResponse struct {
 }
 
 type TlsCertificateEvidence struct {
-	CertificateFingerprint string `json:"certificateFingerprint"` // SHA256 of the DER-encoded certificate
-	CertificatePEM         string `json:"certificatePem"`         // PEM-encoded certificate
-	ReportData             string `json:"reportData"`             // hash(challenge || fingerprint) for nonce binding
+	CertificateFingerprint string `json:"certificateFingerprint"`
+	CertificatePEM         string `json:"certificatePem"`
+	ReportData             string `json:"reportData"`
 }

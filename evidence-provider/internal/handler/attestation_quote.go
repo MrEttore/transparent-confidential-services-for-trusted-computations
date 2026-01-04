@@ -16,7 +16,7 @@ import (
 // It validates the incoming request, decodes the challenge, fetches the attestation evidence,
 // and returns the quote data in the response.
 //
-// The userData field in the quote contains: SHA256(challenge || tlsCertificateFingerprint)
+// The reportData field in the quote contains: SHA256(challenge || tlsCertificateFingerprint)
 // This binds both the client's nonce and the TLS certificate to the hardware-attested quote.
 //
 // Parameters:
@@ -46,20 +46,17 @@ func GetTdxQuote(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Get TLS certificate fingerprint to bind to the quote
 	tlsFingerprint := tlscertificate.GetFingerprint()
 
-	// Compute userData = SHA256(challenge || tlsFingerprint)
-	// This binds both the nonce and certificate to the hardware quote
+	// Compute userData = SHA256(challenge || tlsFingerprint).
+	// This binds both the nonce and certificate to the hardware quote.
 	var userData [64]byte
 	if tlsFingerprint != "" {
 		combined := append(decodedChallenge[:], []byte(tlsFingerprint)...)
 		hash := sha256.Sum256(combined)
-		// Use first 64 bytes (take hash + pad or use full challenge space)
 		copy(userData[:32], hash[:])
-		copy(userData[32:], decodedChallenge[:32]) // Include part of original challenge for verification
+		copy(userData[32:], decodedChallenge[:32])
 	} else {
-		// Fallback if no TLS cert (shouldn't happen in normal operation)
 		userData = decodedChallenge
 	}
 

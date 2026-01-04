@@ -19,6 +19,7 @@ import (
 //  3. Fetch the certificate evidence and bind it to the challenge.
 //  4. Construct the response with the fetched evidence.
 func GetTlsCertificate(w http.ResponseWriter, r *http.Request) {
+
 	// ## REQUEST ##
 	var reqBody types.GetTlsCertificateRequest
 	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {

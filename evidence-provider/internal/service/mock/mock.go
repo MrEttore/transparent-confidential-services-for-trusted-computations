@@ -1,5 +1,3 @@
-// Package mock provides mock evidence data for local development without TDX hardware.
-// Enable mock mode by setting the MOCK_MODE=true environment variable.
 package mock
 
 import (
@@ -15,9 +13,8 @@ func IsMockMode() bool {
 }
 
 // MockTDXQuote returns a sample TDX attestation quote in JSON format.
-// The reportData field is set to the provided userData (base64-encoded) for nonce-binding.
+// The reportData field is set to the provided userData (base64-encoded challenge) for nonce-binding.
 func MockTDXQuote(userData [64]byte) string {
-	// Base64-encode the userData to embed in reportData
 	reportData := base64.StdEncoding.EncodeToString(userData[:])
 
 	return `{

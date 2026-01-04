@@ -10,11 +10,11 @@ import (
 )
 
 func main() {
-	// Generate TLS certificate at startup
+	// Generate TLS certificate at startup.
 	if err := tlscertificate.InitCertificate(); err != nil {
-		log.Printf("⚠️  TLS certificate generation failed: %v", err)
+		log.Printf("TLS certificate generation failed: %v", err)
 	} else {
-		log.Printf("🔐 TLS certificate fingerprint: %s...", tlscertificate.GetFingerprint()[:32])
+		log.Printf("TLS certificate fingerprint: %s...", tlscertificate.GetFingerprint()[:32])
 	}
 
 	router := transport.NewRouter()

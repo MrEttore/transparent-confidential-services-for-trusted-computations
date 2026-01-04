@@ -17,11 +17,12 @@ import (
 
 // FetchEvidence retrieves infrastructure evidence based on the detected cloud provider.
 // It gathers metadata, instance details, and disk information for supported providers.
+//
 // If MOCK_MODE environment variable is set, returns sample mock data for local development.
 func FetchEvidence(ctx context.Context, challenge string) (types.InfrastructureEvidence, error) {
-	// Check for mock mode (local development without cloud provider)
 	if mock.IsMockMode() {
-		log.Println("🔧 Mock mode enabled: returning sample infrastructure evidence")
+		log.Println("Mock mode enabled: returning sample infrastructure evidence")
+
 		return types.InfrastructureEvidence{
 			Summary: &types.InfrastructureSummary{
 				Provider:    "Google Cloud Platform (Mock)",
