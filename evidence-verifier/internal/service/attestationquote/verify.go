@@ -18,15 +18,14 @@ import (
 // Verify parses the given JSON-encoded TDX quote and runs
 // the attestation checks (including collateral fetch and revocation).
 //
-// If MOCK_MODE is enabled, skips hardware quote verification (for local development).
+// If MOCK_MODE is enabled, skips hardware quote verification (for local development without real TDX quotes).
 //
 // It returns a VerificationResult indicating pass/fail.
 func Verify(issuedChallenge, manifestUrl, tlsFingerprint string, evidenceQuote types.Quote) (types.VerificationReport, error) {
-	// Check for mock mode (local development without real TDX quotes)
 	if mock.IsMockMode() {
-		log.Println("🔧 Mock mode enabled: skipping TDX quote hardware verification")
+		log.Println("Mock mode enabled: skipping TDX quote hardware verification")
 
-		// 1. Verify the challenge issued by the Relying Party (still verify this in mock mode)
+		// Verify the challenge issued by the Relying Application.
 		var err error
 		if tlsFingerprint != "" {
 			err = challenge.VerifyWithTlsBinding(issuedChallenge, tlsFingerprint, evidenceQuote.TdQuoteBody.ReportData)
@@ -41,9 +40,7 @@ func Verify(issuedChallenge, manifestUrl, tlsFingerprint string, evidenceQuote t
 			}, nil
 		}
 
-		// 2. Verify the tdx quote evidence against the Reference Value Provider's manifest
-		// Skip this in mock mode since the mock values won't match
-		log.Println("🔧 Mock mode: skipping manifest verification")
+		log.Println("Mock mode enabled: skipping manifest verification")
 
 		return types.VerificationReport{
 			IsVerified: true,
@@ -59,7 +56,7 @@ func Verify(issuedChallenge, manifestUrl, tlsFingerprint string, evidenceQuote t
 		return types.VerificationReport{}, fmt.Errorf("failed to parse attestation quote: %w", err)
 	}
 
-	// 1. Verify the challenge issued by the Relying Party.
+	// 1. Verify the challenge issued by the Relying Application.
 	var err error
 	if tlsFingerprint != "" {
 		err = challenge.VerifyWithTlsBinding(issuedChallenge, tlsFingerprint, evidenceQuote.TdQuoteBody.ReportData)

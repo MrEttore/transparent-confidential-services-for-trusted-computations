@@ -11,7 +11,7 @@ package types
 type VerifyTdxQuoteRequest struct {
 	IssuedChallenge           string `json:"issuedChallenge" validate:"required"`
 	BaselineManifestUrl       string `json:"baselineManifestUrl" validate:"required,url"`
-	TlsCertificateFingerprint string `json:"tlsCertificateFingerprint"` // Optional: for TLS binding verification
+	TlsCertificateFingerprint string `json:"tlsCertificateFingerprint"`
 	Quote                     Quote  `json:"quote" validate:"required"`
 }
 
