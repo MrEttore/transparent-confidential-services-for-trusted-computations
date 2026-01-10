@@ -1,4 +1,5 @@
 # Transparent Confidential Services for Trusted Computations
+# (Conference adapated repository with anonymization)
 
 This repository contains the reference implementation that accompanies the paper _Transparent Confidential Services for Trusted Computations_. The code demonstrates how client-centric attestation can be applied to distributed confidential AI workloads by exposing verifiable evidence to end users. Readers can inspect the exact services, infrastructure manifests, and user interfaces that realize the framework described in the paper.
 
