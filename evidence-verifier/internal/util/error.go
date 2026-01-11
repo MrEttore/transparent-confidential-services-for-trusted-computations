@@ -2,7 +2,7 @@ package util
 
 import (
 	"encoding/json"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/types"
+	"evidence-verifier/internal/types"
 	"log"
 	"net/http"
 )

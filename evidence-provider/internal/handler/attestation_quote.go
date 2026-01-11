@@ -5,11 +5,11 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/MrEttore/Attestify/evidenceprovider/internal/service/attestationquote"
-	"github.com/MrEttore/Attestify/evidenceprovider/internal/service/challenge"
-	"github.com/MrEttore/Attestify/evidenceprovider/internal/service/tlscertificate"
-	"github.com/MrEttore/Attestify/evidenceprovider/internal/types"
-	"github.com/MrEttore/Attestify/evidenceprovider/internal/util"
+	"evidence-provider/internal/service/attestationquote"
+	"evidence-provider/internal/service/challenge"
+	"evidence-provider/internal/service/tlscertificate"
+	"evidence-provider/internal/types"
+	"evidence-provider/internal/util"
 )
 
 // GetTdxQuote handles HTTP requests to fetch an Intel TDX attestation quote.

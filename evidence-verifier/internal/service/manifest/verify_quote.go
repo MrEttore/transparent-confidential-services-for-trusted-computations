@@ -2,7 +2,7 @@ package manifest
 
 import (
 	"fmt"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/types"
+	"evidence-verifier/internal/types"
 )
 
 func VerifyQuoteValues(manifestUrl string, evidenceQuoteBody types.TdQuoteBody) error {

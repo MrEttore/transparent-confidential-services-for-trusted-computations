@@ -3,10 +3,10 @@ package handler
 import (
 	"context"
 	"encoding/json"
-	"github.com/MrEttore/Attestify/evidenceprovider/internal/service/challenge"
-	"github.com/MrEttore/Attestify/evidenceprovider/internal/service/workload"
-	"github.com/MrEttore/Attestify/evidenceprovider/internal/types"
-	"github.com/MrEttore/Attestify/evidenceprovider/internal/util"
+	"evidence-provider/internal/service/challenge"
+	"evidence-provider/internal/service/workload"
+	"evidence-provider/internal/types"
+	"evidence-provider/internal/util"
 	"net/http"
 )
 

@@ -5,7 +5,7 @@ import (
 	"cloud.google.com/go/compute/apiv1/computepb"
 	"cloud.google.com/go/compute/metadata"
 	"context"
-	"github.com/MrEttore/Attestify/evidenceprovider/internal/types"
+	"evidence-provider/internal/types"
 )
 
 func FillGCP(ctx context.Context, sum *types.InfrastructureSummary) error {

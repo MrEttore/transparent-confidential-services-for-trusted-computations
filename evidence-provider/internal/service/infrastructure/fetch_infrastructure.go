@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"cloud.google.com/go/compute/metadata"
-	"github.com/MrEttore/Attestify/evidenceprovider/internal/service/mock"
-	"github.com/MrEttore/Attestify/evidenceprovider/internal/types"
-	"github.com/MrEttore/Attestify/evidenceprovider/internal/util"
+	"evidence-provider/internal/service/mock"
+	"evidence-provider/internal/types"
+	"evidence-provider/internal/util"
 	"google.golang.org/api/compute/v1"
 	"google.golang.org/api/option"
 )

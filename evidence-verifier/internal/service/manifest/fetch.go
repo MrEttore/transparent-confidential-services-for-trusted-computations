@@ -5,7 +5,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/types"
+	"evidence-verifier/internal/types"
 	"io"
 	"net/http"
 	"strings"

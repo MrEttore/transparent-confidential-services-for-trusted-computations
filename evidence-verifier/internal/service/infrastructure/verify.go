@@ -1,10 +1,11 @@
 package infrastructure
 
 import (
+	"evidence-verifier/internal/service/challenge"
+	"evidence-verifier/internal/service/manifest"
+	"evidence-verifier/internal/service/mock"
+	"evidence-verifier/internal/types"
 	"fmt"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/service/challenge"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/service/manifest"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/types"
 )
 
 func Verify(issuedChallenge, manifestUrl string, infrastructureEvidence types.InfrastructureEvidence) (types.VerificationReport, error) {
@@ -18,11 +19,14 @@ func Verify(issuedChallenge, manifestUrl string, infrastructureEvidence types.In
 	}
 
 	// 2. Verify the infrastructure evidence against the Reference Value Provider's manifest.
-	if err := manifest.VerifyInfrastructureValues(manifestUrl, infrastructureEvidence); err != nil {
-		return types.VerificationReport{
-			IsVerified: false,
-			Message:    fmt.Sprintf("manifest verification failed: %v", err),
-		}, nil
+	// In Mock Mode, we skip fetching the remote manifest to avoid failures on dead links.
+	if !mock.IsMockMode() {
+		if err := manifest.VerifyInfrastructureValues(manifestUrl, infrastructureEvidence); err != nil {
+			return types.VerificationReport{
+				IsVerified: false,
+				Message:    fmt.Sprintf("manifest verification failed: %v", err),
+			}, nil
+		}
 	}
 
 	return types.VerificationReport{

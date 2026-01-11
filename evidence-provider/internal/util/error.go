@@ -2,7 +2,7 @@ package util
 
 import (
 	"encoding/json"
-	"github.com/MrEttore/Attestify/evidenceprovider/internal/types"
+	"evidence-provider/internal/types"
 	"net/http"
 )
 

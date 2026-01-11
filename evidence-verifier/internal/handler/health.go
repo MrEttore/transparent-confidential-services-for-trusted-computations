@@ -2,8 +2,8 @@ package handler
 
 import (
 	"encoding/json"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/types"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/util"
+	"evidence-verifier/internal/types"
+	"evidence-verifier/internal/util"
 	"net/http"
 )
 

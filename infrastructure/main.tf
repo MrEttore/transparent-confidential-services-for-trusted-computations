@@ -22,7 +22,7 @@ module "firewall" {
   target_tags   = ["allow-attestation"]
 }
 
-# SanctuAIry's prod confidential VM based on the golden boot disk image "golden-reference-tee".
+# Transparent Service's prod confidential VM based on the golden boot disk image "golden-reference-tee".
 module "prod_tee" {
   source               = "./modules/compute"
   instance_name        = "llm-core-tee"

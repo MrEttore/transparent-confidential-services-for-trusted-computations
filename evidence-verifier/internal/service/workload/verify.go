@@ -2,8 +2,8 @@ package workload
 
 import (
 	"fmt"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/service/challenge"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/types"
+	"evidence-verifier/internal/service/challenge"
+	"evidence-verifier/internal/types"
 )
 
 func Verify(issuedChallenge string, workloadEvidence *types.WorkloadEvidence, referenceImage *types.ReferenceImage, workloadReferenceMetadata *types.WorkloadReferenceMetadata) (types.VerificationReport, error) {

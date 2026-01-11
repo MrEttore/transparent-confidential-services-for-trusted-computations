@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/MrEttore/Attestify/evidenceprovider/internal/service/tlscertificate"
-	transport "github.com/MrEttore/Attestify/evidenceprovider/internal/transport/http"
+	"evidence-provider/internal/service/tlscertificate"
+	transport "evidence-provider/internal/transport/http"
 )
 
 func main() {

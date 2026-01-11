@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/MrEttore/Attestify/evidenceprovider/internal/service/mock"
-	"github.com/MrEttore/Attestify/evidenceprovider/internal/types"
-	"github.com/MrEttore/Attestify/evidenceprovider/internal/util"
+	"evidence-provider/internal/service/mock"
+	"evidence-provider/internal/types"
+	"evidence-provider/internal/util"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
 )

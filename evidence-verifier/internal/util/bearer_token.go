@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/types"
+	"evidence-verifier/internal/types"
 	"net/http"
 )
 

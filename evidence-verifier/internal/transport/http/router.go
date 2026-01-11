@@ -3,8 +3,8 @@ package http
 import (
 	"net/http"
 
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/handler"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/metrics"
+	"evidence-verifier/internal/handler"
+	"evidence-verifier/internal/metrics"
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"

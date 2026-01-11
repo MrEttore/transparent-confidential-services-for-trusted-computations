@@ -3,9 +3,10 @@ package workload
 import (
 	"context"
 	"encoding/json"
+	"evidence-verifier/internal/service/mock"
+	"evidence-verifier/internal/types"
+	"evidence-verifier/internal/util"
 	"fmt"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/types"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/util"
 	"net/http"
 )
 
@@ -114,6 +115,28 @@ func FetchWorkloadReferenceMetadata(
 	ctx context.Context,
 	referenceImage *types.ReferenceImage,
 ) (types.WorkloadReferenceMetadata, error) {
+	if mock.IsMockMode() {
+		// Return mock metadata matching the provider's mock values
+		// Digest: sha256:435faa6db70075a575dd54e2a1e76cee14bd53fb67be4fdfa3736d879b9f1ccb
+		return types.WorkloadReferenceMetadata{
+			Metadata: types.TagMetadata{
+				Name: "latest",
+				Images: []types.TagImage{
+					{Digest: "sha256:435faa6db70075a575dd54e2a1e76cee14bd53fb67be4fdfa3736d879b9f1ccb"},
+				},
+			},
+			Manifest: types.ManifestV2{
+				Config: struct {
+					MediaType string `json:"mediaType"`
+					Size      int64  `json:"size"`
+					Digest    string `json:"digest"`
+				}{
+					Digest: "sha256:435faa6db70075a575dd54e2a1e76cee14bd53fb67be4fdfa3736d879b9f1ccb",
+				},
+			},
+		}, nil
+	}
+
 	metadata, err := fetchImageTagMetadata(ctx, referenceImage.Namespace, referenceImage.Repository, referenceImage.Tag)
 	if err != nil {
 		return types.WorkloadReferenceMetadata{}, err

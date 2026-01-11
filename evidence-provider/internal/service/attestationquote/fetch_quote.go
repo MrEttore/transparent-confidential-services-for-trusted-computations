@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/MrEttore/Attestify/evidenceprovider/internal/service/mock"
+	"evidence-provider/internal/service/mock"
 	"github.com/google/go-tdx-guest/client"
 	"github.com/google/go-tdx-guest/proto/tdx"
 	"google.golang.org/protobuf/encoding/protojson"

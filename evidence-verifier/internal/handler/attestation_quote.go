@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/service/attestationquote"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/types"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/util"
+	"evidence-verifier/internal/service/attestationquote"
+	"evidence-verifier/internal/types"
+	"evidence-verifier/internal/util"
 	"github.com/go-playground/validator/v10"
 )
 

@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/service/challenge"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/service/manifest"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/service/mock"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/types"
+	"evidence-verifier/internal/service/challenge"
+	"evidence-verifier/internal/service/manifest"
+	"evidence-verifier/internal/service/mock"
+	"evidence-verifier/internal/types"
 
 	"github.com/google/go-tdx-guest/proto/tdx"
 	"github.com/google/go-tdx-guest/verify"

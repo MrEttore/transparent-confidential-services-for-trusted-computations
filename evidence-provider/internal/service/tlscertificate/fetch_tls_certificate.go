@@ -18,7 +18,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MrEttore/Attestify/evidenceprovider/internal/types"
+	"evidence-provider/internal/types"
 )
 
 var (

@@ -2,9 +2,9 @@ package handler
 
 import (
 	"encoding/json"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/service/infrastructure"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/types"
-	"github.com/MrEttore/Attestify/evidenceverifier/internal/util"
+	"evidence-verifier/internal/service/infrastructure"
+	"evidence-verifier/internal/types"
+	"evidence-verifier/internal/util"
 	"github.com/go-playground/validator/v10"
 	"log"
 	"net/http"

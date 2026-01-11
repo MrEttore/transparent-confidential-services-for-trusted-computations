@@ -6,7 +6,7 @@ import (
 	"net/http"
 	_ "net/http/pprof" // registers /debug/pprof/* handlers :contentReference[oaicite:6]{index=6}
 
-	transport "github.com/MrEttore/Attestify/evidenceverifier/internal/transport/http"
+	transport "evidence-verifier/internal/transport/http"
 )
 
 func main() {
