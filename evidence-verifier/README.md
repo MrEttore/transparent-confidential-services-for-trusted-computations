@@ -27,7 +27,7 @@ All verification endpoints expect the Relying Application to forward the evidenc
     "issuedChallenge": "Qk1nQ2h6b2J4b2d6b2J4Qk1nQ2h6b2J4b2d6b2J4Qk1nQ2h6b2J4b2d6b2J4Qk1nQ2h6b2J4b2d6b2J4Qk1n2g==",
 
     // HTTPS URL pointing at the golden manifest (JSONC) published by the Reference Value Provider.
-    "baselineManifestUrl": "https://raw.githubusercontent.com/MrEttore/SanctuAIry-baseline-manifests/v2.0.0/baseline-manifest-v2.jsonc",
+    "baselineManifestUrl": "https://anonymous.4open.science/r/transparent-confidential-services-76BB/artifacts/baseline-manifest-v2.jsonc",
 
     // TDX quote payload obtained from the Evidence Provider.
     "quote": { "header": { ... }, "tdQuoteBody": { ... }, "signedData": { ... } }
@@ -105,7 +105,7 @@ All verification endpoints expect the Relying Application to forward the evidenc
 {
     "issuedChallenge": "Qk1nQ2h6b2J4b2d6b2J4Qk1nQ2h6b2J4b2d6b2J4Qk1nQ2h6b2J4b2d6b2J4Qk1nQ2h6b2J4b2d6b2J4Qk1n2g==",
 
-    "baselineManifestUrl": "https://raw.githubusercontent.com/MrEttore/SanctuAIry-baseline-manifests/v2.0.0/baseline-manifest-v2.jsonc",
+    "baselineManifestUrl": "https://anonymous.4open.science/r/transparent-confidential-services-76BB/artifacts/baseline-manifest.jsonc",
 
     "evidence": {
         "summary": { "provider": "Google Cloud Platform", "instanceId": "8105972874086498876", ... },

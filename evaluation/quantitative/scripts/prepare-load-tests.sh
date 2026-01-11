@@ -1,10 +1,10 @@
 #!/bin/bash
 set -euo pipefail
 
-REPO_OWNER="MrEttore"
+REPO_OWNER="Anonymous"
 REPO_NAME="transparent-confidential-services"
 REPO_REF="main"
-RAW_BASE="https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${REPO_REF}"
+RAW_BASE="https://anonymous.4open.science/r/transparent-confidential-services-76BB"
 
 EP_DIR="$HOME/quantitative/evidence-provider"
 EV_DIR="$HOME/quantitative/evidence-verifier"

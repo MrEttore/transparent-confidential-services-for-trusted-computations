@@ -176,14 +176,13 @@ export function VerifyEvidence() {
                             )}
                         </div>
                         <button
-                            className={`mx-auto my-auto h-10 w-1/2 rounded-lg px-1 py-0.5 text-base font-semibold transition-colors duration-200 ${
-                                verifyQuoteMutation.isPending
+                            className={`mx-auto my-auto h-10 w-1/2 rounded-lg px-1 py-0.5 text-base font-semibold transition-colors duration-200 ${verifyQuoteMutation.isPending
                                     ? 'cursor-not-allowed bg-amber-500/60 text-white opacity-75'
                                     : verifyQuoteMutation.isSuccess ||
                                         verification?.quote
-                                      ? 'cursor-default bg-green-500/20 text-green-200 opacity-80'
-                                      : 'cursor-pointer bg-amber-500/80 text-white hover:bg-amber-500'
-                            }`}
+                                        ? 'cursor-default bg-green-500/20 text-green-200 opacity-80'
+                                        : 'cursor-pointer bg-amber-500/80 text-white hover:bg-amber-500'
+                                }`}
                             type="submit"
                             form="verify-quote-form"
                             disabled={
@@ -196,7 +195,7 @@ export function VerifyEvidence() {
                             ) : verifyQuoteMutation.isError ? (
                                 'Retry'
                             ) : verifyQuoteMutation.isSuccess ||
-                              verification?.quote ? (
+                                verification?.quote ? (
                                 <Check className="inline-block" />
                             ) : (
                                 'Verify'
@@ -268,14 +267,13 @@ export function VerifyEvidence() {
                             )}
                         </div>
                         <button
-                            className={`mx-auto my-auto h-10 w-1/2 rounded-lg px-1 py-0.5 text-base font-semibold transition-colors duration-200 ${
-                                verifyWorkloadMutation.isPending
+                            className={`mx-auto my-auto h-10 w-1/2 rounded-lg px-1 py-0.5 text-base font-semibold transition-colors duration-200 ${verifyWorkloadMutation.isPending
                                     ? 'cursor-not-allowed bg-amber-500/60 text-white opacity-75'
                                     : verifyWorkloadMutation.isSuccess ||
                                         verification?.workloads
-                                      ? 'cursor-default bg-green-500/20 text-green-200 opacity-80'
-                                      : 'cursor-pointer bg-amber-500/80 text-white hover:bg-amber-500'
-                            }`}
+                                        ? 'cursor-default bg-green-500/20 text-green-200 opacity-80'
+                                        : 'cursor-pointer bg-amber-500/80 text-white hover:bg-amber-500'
+                                }`}
                             type="submit"
                             form="verify-workload-form"
                             disabled={
@@ -288,7 +286,7 @@ export function VerifyEvidence() {
                             ) : verifyWorkloadMutation.isError ? (
                                 'Retry'
                             ) : verifyWorkloadMutation.isSuccess ||
-                              verification?.workloads ? (
+                                verification?.workloads ? (
                                 <Check className="inline-block" />
                             ) : (
                                 'Verify'
@@ -331,7 +329,7 @@ export function VerifyEvidence() {
                                             e.target.value,
                                         )
                                     }
-                                    placeholder="https://example.com/baseline-manifest-infrastructure.jsonc"
+                                    placeholder="https://anonymous.4open.science/r/transparent-confidential-services-76BB/artifacts/baseline-manifest-v2.jsonc"
                                 />
                             </div>
                             {verifyInfrastructureMutation.isError && (
@@ -343,14 +341,13 @@ export function VerifyEvidence() {
                             )}
                         </div>
                         <button
-                            className={`mx-auto my-auto h-10 w-1/2 rounded-lg px-1 py-0.5 text-base font-semibold transition-colors duration-200 ${
-                                verifyInfrastructureMutation.isPending
+                            className={`mx-auto my-auto h-10 w-1/2 rounded-lg px-1 py-0.5 text-base font-semibold transition-colors duration-200 ${verifyInfrastructureMutation.isPending
                                     ? 'cursor-not-allowed bg-amber-500/60 text-white opacity-75'
                                     : verifyInfrastructureMutation.isSuccess ||
                                         verification?.infrastructure
-                                      ? 'cursor-default bg-green-500/20 text-green-200 opacity-80'
-                                      : 'cursor-pointer bg-amber-500/80 text-white hover:bg-amber-500'
-                            }`}
+                                        ? 'cursor-default bg-green-500/20 text-green-200 opacity-80'
+                                        : 'cursor-pointer bg-amber-500/80 text-white hover:bg-amber-500'
+                                }`}
                             type="submit"
                             form="verify-infrastructure-form"
                             disabled={
@@ -363,7 +360,7 @@ export function VerifyEvidence() {
                             ) : verifyInfrastructureMutation.isError ? (
                                 'Retry'
                             ) : verifyInfrastructureMutation.isSuccess ||
-                              verification?.infrastructure ? (
+                                verification?.infrastructure ? (
                                 <Check className="inline-block" />
                             ) : (
                                 'Verify'

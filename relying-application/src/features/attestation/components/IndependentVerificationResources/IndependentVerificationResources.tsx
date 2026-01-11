@@ -40,7 +40,7 @@ export default function IndependentVerificationResources() {
                     <VerificationResource
                         name="Baseline manifest repository"
                         description="The baseline manifest used by the verifier service to audit the confidential service's TEE and infrastructure configuration."
-                        resourceLink="https://github.com/MrEttore/transparent-confidential-services-for-trusted-computations/tree/evaluation/reference-value-provider"
+                        resourceLink="https://anonymous.4open.science/r/transparent-confidential-services-76BB/reference-value-provider"
                         linkPlaceholder="View on GitHub"
                     />
                 </div>

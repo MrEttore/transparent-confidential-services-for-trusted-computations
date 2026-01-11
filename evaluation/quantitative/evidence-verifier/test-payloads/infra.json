@@ -1,6 +1,6 @@
 {
   "issuedChallenge": "Qk1nQ2h6b2J4b2d6b2J4Qk1nQ2h6b2J4b2d6b2J4Qk1nQ2h6b2J4b2d6b2J4Qk1nQ2h6b2J4b2d6b2J4Qk1n2g==",
-  "baselineManifestUrl": "https://raw.githubusercontent.com/MrEttore/transparent-confidential-services-for-trusted-computations/refs/heads/main/reference-value-provider/baseline-manifest.jsonc",
+  "baselineManifestUrl": "https://anonymous.4open.science/r/transparent-confidential-services-76BB/artifacts/baseline-manifest.jsonc",
   "evidence": {
     "summary": {
       "provider": "Google Cloud Platform",
@@ -122,7 +122,9 @@
       "serviceAccounts": [
         {
           "email": "40815901860-compute@developer.gserviceaccount.com",
-          "scopes": ["https://www.googleapis.com/auth/cloud-platform"]
+          "scopes": [
+            "https://www.googleapis.com/auth/cloud-platform"
+          ]
         }
       ],
       "shieldedInstanceConfig": {
@@ -136,7 +138,10 @@
       "status": "RUNNING",
       "tags": {
         "fingerprint": "77qVEfZytmA=",
-        "items": ["allow-attestation", "allow-service-requests"]
+        "items": [
+          "allow-attestation",
+          "allow-service-requests"
+        ]
       },
       "zone": "https://www.googleapis.com/compute/v1/projects/cvm-icdcs/zones/europe-west4-a"
     },
@@ -176,7 +181,9 @@
       "kind": "compute#disk",
       "labelFingerprint": "42WmSpB8rSM=",
       "lastAttachTimestamp": "2025-12-07T09:35:43.467-08:00",
-      "licenseCodes": ["5511465778777431107"],
+      "licenseCodes": [
+        "5511465778777431107"
+      ],
       "licenses": [
         "https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/licenses/ubuntu-2204-lts"
       ],
