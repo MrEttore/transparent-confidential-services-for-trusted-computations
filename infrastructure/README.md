@@ -1,71 +1,36 @@
-## Cloud Deployment with Terraform
+# Infrastructure
 
-This guide explains how to deploy SanctuAIry securely in the cloud using **Google Cloud confidential VMs** and Terraform. Follow these steps to run the LLM Core in a secure, hardware-based Trusted Execution Environment (TEE).
+Terraform configuration that provisions the Computational Logic Attester on Google Cloud with Intel TDX support.
 
-> **Note:** For an overview and local deployment instructions, see the [main README](../README.md).
+## Prerequisites
 
-### Prerequisites
+- [Terraform](https://developer.hashicorp.com/terraform/downloads) 1.2+
+- [Google Cloud SDK](https://cloud.google.com/sdk/docs/install) (`gcloud`)
+- Access to a Google Cloud project with Intel TDX-enabled machine images
+- Permissions to create Compute Engine instances and firewall rules
 
--   [Terraform](https://developer.hashicorp.com/terraform/downloads) (v1.2 or newer)
--   [Google Cloud SDK](https://cloud.google.com/sdk/docs/install) (`gcloud`)
--   A Google Cloud project with billing enabled and sufficient quota for confidential VMs
--   Permissions to create Compute Engine resources
+## Deployment
 
-### Setup & Deployment
+```bash
+cd infrastructure
+cp terraform.tfvars.example terraform.tfvars
 
-1. **Navigate to the infrastructure folder:**
+# Edit terraform.tfvars: set project_id, region, zone, and golden_image_project_id
 
-    ```bash
-    cd infrastructure
-    ```
+gcloud auth application-default login
+gcloud config set project <your-project-id>
 
-2. **Copy and edit the Terraform variables file:**
+terraform init
+terraform plan
+terraform apply
+```
 
-    ```bash
-    cp terraform.tfvars.example terraform.tfvars
-    ```
+Record the VM name, zone, and SSH details for Evidence Provider deployment.
 
-    Edit `terraform.tfvars` and set your `project_id`, `region`, and (optionally) `golden_image_project_id`.
+## What Gets Deployed
 
-3. **Authenticate with Google Cloud:**
+- **Confidential VM (`llm-core-tee`):** Intel TDX-enabled instance running a dummy confidential workload (`llm-core`) under systemd.
+- **Firewall rule (`allow-attestation`):** Ingress rule for attestation endpoints
+- **Bootstrap script (`init-tee.sh`):** Installs Docker, Go, and configures the workload service at first boot
 
-    ```bash
-    gcloud auth application-default login
-    gcloud config set project <your-project-id>
-    ```
-
-4. **Initialize Terraform:**
-
-    ```bash
-    terraform init
-    ```
-
-5. **Review the planned changes:**
-
-    ```bash
-    terraform plan
-    ```
-
-6. **Apply the deployment:**
-
-    ```bash
-    terraform apply
-    ```
-
-    Confirm when prompted.
-
-7. **(Optional) Destroy resources when done:**
-
-    ```bash
-    terraform destroy
-    ```
-
-### What Gets Deployed?
-
--   A confidential TDX-based VM running the LLM Core Docker container
--   A firewall rule to allow attestation traffic
--   All necessary network and disk resources
-
-The deployed VM uses a golden image boot disk with Docker pre-installed and a service that, at each boot, pulls the newest image of the `llm-core`.
-
-The VM leverages confidential computing to keep AI inference secure. The LLM Core code runs inside a TEE, ensuring that all inference and data processing remain confidential and protected from the underlying cloud provider.
+The CVM uses a golden reference image (`golden-reference-tee`) with pre-configured Docker support. At boot, `init-tee.sh` pulls the latest `llm-core` container and starts it as a systemd service, ensuring runtime measurements align with published baseline manifests.
