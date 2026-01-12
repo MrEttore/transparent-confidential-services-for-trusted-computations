@@ -1,8 +1,8 @@
 # Relying Application - Attestation UI Walkthrough
 
-The relying application is a React + TypeScript single-page experience that lets end users orchestrate the full attestation round-trip before sharing sensitive data. This guide focuses on the attestation feature (`src/features/attestation`) and explains how the UI surfaces the challenge generation, evidence collection, and verification phases defined in the paper.
+The Relying Application is a React + TypeScript SPA that lets end users orchestrate the full attestation round-trip before sharing sensitive data to a CVM. This guide focuses on the attestation feature (`src/features/attestation`) and explains how the UI surfaces the challenge generation, evidence collection, and verification phases defined in the paper.
 
-> **Hosting note:** For the reference deployment we host this UI ourselves so the build pipeline stays within a trusted boundary, otherwise a malicious middleware operator could inject obfuscated front-end code that flips a failed verification into a success. In production, the relying party should host the UI from infrastructure they control.
+> **Hosting note:** For the reference deployment we host this UI ourselves so the build pipeline stays within a trusted boundary, otherwise a malicious middleware operator could inject obfuscated front-end code that flips a failed verification into a success. In production, the service operator should host the UI from infrastructure they control.
 
 ## Attestation Experience Overview
 
@@ -60,6 +60,6 @@ _Figure 3. Resource grid linking reference containers, verifier binaries, and ba
 ## Additional UI Capabilities
 
 - **Session State Management:** the attestation slice persists the current challenge, evidence bundles, and verification results so that users can revisit artifacts without re-running the flow.
-- **Modal System:** shared `Modal` and `ModalType` definitions ensure a consistent look, keyboard accessibility, and straightforward extension for new artifact viewers.
+- **Modal System:** shared `Modal` and `ModalType` definitions ensure a consistent look and straightforward extension for new artifact viewers.
 - **Trust Badges:** `TrustStatusBadge` communicates verification results at-a-glance, switching between trusted, untrusted, and pending states.
 - **Timeline Reset Hooks:** the slice exposes actions to clear evidence or restart attestation, making it simple to demonstrate replay protection during live talks.
