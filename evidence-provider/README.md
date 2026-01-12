@@ -1,6 +1,6 @@
 # Evidence Provider Service
 
-The Evidence Provider runs inside the Confidential VM (Intel TDX) alongside the workload. It exposes REST endpoints that bind hardware quotes, workload metadata, and infrastructure state to a caller-supplied 64-byte challenge. This document describes the HTTP interface, request/response payloads, and expected behaviour for each endpoint.
+The Evidence Provider runs inside the CVM (Intel TDX) alongside the confidential workloads. It exposes REST endpoints that bind hardware quotes, workload metadata, and infrastructure state to a client-supplied 64-byte challenge. This document describes the HTTP interface, request/response payloads, and expected behaviour for each endpoint.
 
 ## API Overview
 
@@ -137,6 +137,6 @@ HTTP status codes reflect the error category (`400` for client issues, `500` for
 
 ## Operational Notes
 
-- All endpoints require HTTPS termination by the surrounding infrastructure; the service listens on HTTP port `8080` inside the CVM.
+- All endpoints require HTTPS termination by the surrounding infrastructure. The service listens on HTTP port `8080` inside the CVM.
 - `/metrics` exposes Prometheus counters and histograms (request duration, status codes).
 - `/debug/pprof/*` is available for troubleshooting when port-forwarded to trusted operators.
