@@ -1,6 +1,6 @@
 # Evidence Verifier Service
 
-The Evidence Verifier implements the client-controlled appraisal logic. It validates attestation evidence returned by the Evidence Provider against public baselines (Intel endorsements, Docker image digests, infrastructure manifests). This document captures the HTTP interface, request/response payloads, and observed behaviour.
+The Evidence Verifier implements the client-controlled appraisal logic. It validates the _Attestation Evidence_ returned by the Evidence Provider against public baselines (Intel endorsements, Docker image digests, infrastructure manifests). This document captures the HTTP interface, request/response payloads, and observed behaviour.
 
 ## API Overview
 
@@ -150,6 +150,6 @@ HTTP status codes mirror the handler outcome (`400` for request validation error
 
 ## Operational Notes
 
-- The service listens on HTTP port `8081`. Deploy it behind TLS when exposed externally.
-- `/metrics` exposes Prometheus request metrics; `/debug/pprof/*` is intended for controlled debugging.
-- Keep the baseline manifests and Docker registry credentials (if required) accessible from the environment hosting the verifier.
+- The service listens on HTTP port `8081`.
+- `/metrics` exposes Prometheus request metrics and `/debug/pprof/*` is intended for controlled debugging.
+- Keep the baseline manifests and Docker registry credentials (if required) accessible from the environment hosting the Evidence Verifier.

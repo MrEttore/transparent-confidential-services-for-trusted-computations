@@ -1,6 +1,6 @@
 # Reference Value Provider
 
-The reference value provider role anchors the verifier's trust decisions in public, immutable artifacts. In a production deployment these artifacts would be hosted on independent registries such as Sigstore (for manifests) and Docker Hub (for container images). For the repository-backed implementation of the framework, the `reference-value-provider/` directory stands in for that external source of truth by publishing the signed baseline manifests that the Evidence Verifier queries during appraisal.
+The Reference Value Provider role anchors the Evidence Verifier's trust decisions in public, immutable artifacts. In a production deployment these artifacts would be hosted on independent registries such as Sigstore (for manifests) and Docker Hub (for container images). For the repository-backed implementation of the framework, the `reference-value-provider/` directory stands in for that external source of truth by publishing the signed baseline manifests that the Evidence Verifier queries during appraisal.
 
 ## Baseline Manifest
 
@@ -10,13 +10,13 @@ The consolidated manifest lives at `baseline-manifest.jsonc` and records the tru
 - `sourceImage`, `sourceImageId`: provenance links to the golden boot disk exposed through Google Compute Engine.
 - `mrTd`, `mrSeam`, `tdAttributes`, `teeTcbSvn`, `xfam`: Intel TDX launch measurements extracted from the reference CVM.
 
-The Evidence Verifier compares live attestation evidence against these values to confirm that the running CVM replays the same measured environment. Container digests are validated separately against their authoritative registries; the manifest exists solely to cover infrastructure and TEE state.
+The Evidence Verifier compares live _Attestation Evidence_ against these values to confirm that the running CVM replays the same measured environment. Container digests are validated separately against their authoritative registries. The manifest exists solely to cover infrastructure and TEE state.
 
 ## Golden Reference Generation Workflow
 
 The baseline manifest was produced once, following the workflow below.
 
-1. **Create the reference CVM**
+1. **Create the reference CVM:**
 
    ```bash
    gcloud compute instances create reference-cvm \
@@ -33,16 +33,13 @@ The baseline manifest was produced once, following the workflow below.
      --metadata-from-file startup-script="init-tee.sh"
    ```
 
-2. **Wait for initialization**
-   Allow the startup script to install Docker, Go, and enable the confidential workload service.
+2. **Wait for initialization:** Allow the startup script to install Docker, Go, and enable the confidential workload service.
 
-3. **Deploy the Evidence Provider**
-   Copy the compiled Evidence Provider binary to the CVM and start it so that attestation APIs are reachable.
+3. **Deploy the Evidence Provider:** Copy the compiled Evidence Provider binary to the CVM and start it so that attestation APIs are reachable.
 
-4. **Collect launch measurements**
-   Call the Evidence Provider running on the reference CVM to export the combined evidence bundle (TDX quote, workload metadata, infrastructure metadata). Record the TDX measurements (`mrTd`, `mrSeam`, `teeTcbSvn`, `tdAttributes`, `xfam`).
+4. **Collect launch measurements:** Call the Evidence Provider running on the reference CVM to export the combined evidence bundle (TDX quote, workload metadata, infrastructure metadata). Record the TDX measurements (`mrTd`, `mrSeam`, `teeTcbSvn`, `tdAttributes`, `xfam`).
 
-5. **Build and sign the baseline manifest**
+5. **Build and sign the baseline manifest:**
 
    ```jsonc
    {
@@ -71,7 +68,7 @@ The baseline manifest was produced once, following the workflow below.
    git push --follow-tags
    ```
 
-6. **Snapshot the boot disk**
+6. **Snapshot the boot disk:**
 
    ```bash
    gcloud compute images create golden-reference-cvm \
@@ -83,7 +80,7 @@ The baseline manifest was produced once, following the workflow below.
      --role="roles/compute.imageUser"
    ```
 
-7. **Instantiate attesters from the golden image**
+7. **Instantiate attesters from the golden image:**
 
    ```bash
    gcloud compute instances create cvm-1 \
@@ -99,4 +96,4 @@ The baseline manifest was produced once, following the workflow below.
      --scopes=https://www.googleapis.com/auth/cloud-platform
    ```
 
-In a production deployment these artifacts should be published to an external registry and protected using a supply-chain hardening framework such as SLSA. The repository copy remains to make the framework self-contained for evaluation and demonstration.
+In a production deployment these artifacts should be published to an external registry and protected using a supply-chain hardening framework. The repository copy remains to make the framework self-contained for evaluation and demonstration.
